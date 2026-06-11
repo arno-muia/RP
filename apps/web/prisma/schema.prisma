@@ -1016,3 +1016,114 @@ model SystemConfig {
 
   @@index([key])
 }
+
+// ─── PUBLIC WEBSITE CONTENT ──────────────────────────────────────────────────
+
+model SermonSeries {
+  id          String         @id @default(uuid())
+  slug        String         @unique
+  title       String
+  description String
+  imageUrl    String
+  sermonCount Int            @default(0)
+  sortOrder   Int            @default(0)
+  isPublished Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  sermons     PublicSermon[]
+
+  @@index([isPublished])
+  @@index([sortOrder])
+}
+
+model PublicSermon {
+  id           String        @id @default(uuid())
+  slug         String        @unique
+  title        String
+  description  String
+  seriesId     String?
+  seriesSlug   String
+  seriesTitle  String
+  scripture    String?
+  speaker      String
+  date         DateTime
+  videoUrl     String
+  audioUrl     String?
+  notesUrl     String?
+  thumbnailUrl String
+  duration     String?
+  tags         Json          @default("[]")
+  isPublished  Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  series       SermonSeries? @relation(fields: [seriesId], references: [id])
+
+  @@index([seriesSlug])
+  @@index([isPublished])
+  @@index([date])
+}
+
+model WebsiteLeader {
+  id          String   @id @default(uuid())
+  name        String
+  role        String
+  bio         String
+  photoUrl    String
+  sortOrder   Int      @default(0)
+  social      Json?
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sortOrder])
+}
+
+model WebsiteTestimonial {
+  id          String   @id @default(uuid())
+  quote       String
+  name        String
+  role        String?
+  photoUrl    String?
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sortOrder])
+}
+
+model WebsiteAcademyModule {
+  id           String   @id @default(uuid())
+  title        String
+  description  String
+  instructor   String
+  lessonsCount Int
+  duration     String
+  sortOrder    Int      @default(0)
+  isPublished  Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([sortOrder])
+}
+
+model ContactSubmission {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  message   String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model PrayerSubmission {
+  id        String   @id @default(uuid())
+  name      String?
+  request   String
+  anonymous Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

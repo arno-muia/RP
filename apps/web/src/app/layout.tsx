@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Bebas_Neue, Dancing_Script, Montserrat } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/site";
 
-const inter = Inter({
-  variable: "--font-inter",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "900"],
 });
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: "400",
+});
+
+const dancingScript = Dancing_Script({
+  variable: "--font-dancing",
+  subsets: ["latin"],
+  weight: "700",
 });
 
 export const metadata: Metadata = {
@@ -20,10 +27,19 @@ export const metadata: Metadata = {
     template: `%s | ${site.shortName}`,
   },
   description: site.description,
+  keywords: [
+    "Royal Priesthood Embassy Thika",
+    "Kingdom Formation Kenya",
+    "Pastor Charles Muchemi",
+    "church Thika Kenya",
+    "online church service Kenya",
+  ],
   openGraph: {
     title: site.name,
     description: site.description,
     type: "website",
+    url: "https://rpwebsite.vercel.app",
+    siteName: site.name,
   },
 };
 
@@ -35,9 +51,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${cormorant.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${bebasNeue.variable} ${dancingScript.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-cream font-sans text-stone-900">
+      <body className="min-h-full bg-cream font-sans text-charcoal">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-burgundy focus:px-4 focus:py-2 focus:text-white"
+        >
+          Skip to content
+        </a>
         {children}
       </body>
     </html>

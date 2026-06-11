@@ -1,74 +1,75 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { getServiceTimes } from "@/lib/content";
 import { navLinks, site } from "@/lib/site";
 
 const footerColumns = [
   {
-    title: "Resources",
+    title: "About",
     links: [
-      { label: "About", href: "/about" },
-      { label: "New Here?", href: "/visit" },
-      { label: "Next Steps", href: "/next-steps" },
-      { label: "Sermons", href: "/sermons" },
-      { label: "Care", href: "/care" },
-      { label: "Give", href: "/giving" },
+      { label: "Our Story", href: "/about" },
+      { label: "Leadership", href: "/about#leadership" },
+      { label: "Statement of Faith", href: "/about#beliefs" },
+      { label: "2026 Theme", href: "/about#theme" },
     ],
   },
+  { title: "Media", links: [...navLinks.media] },
   {
     title: "Connect",
     links: [
-      { label: "Get Involved", href: "/get-involved" },
-      { label: "Small Groups", href: "/groups" },
+      { label: "Plan Your Visit", href: "/visit" },
       { label: "Events", href: "/events" },
       { label: "Contact", href: "/contact" },
+      { label: "Prayer Request", href: "/prayer" },
+      { label: "Give", href: "/give" },
     ],
   },
   {
-    title: "Ministries",
-    links: navLinks.ministries.map((item) => ({
-      label: item.label,
-      href: item.href,
-    })),
+    title: "Legal",
+    links: [
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
+    ],
   },
 ] as const;
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const serviceTimes = await getServiceTimes();
+
   return (
-    <footer className="bg-stone-950 text-stone-300">
+    <footer className="bg-charcoal text-stone-300">
       <div className="mx-auto max-w-7xl px-5 py-16 md:px-8">
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_2fr]">
+        <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr]">
           <div className="space-y-6">
-            <p className="font-serif text-3xl text-white">{site.shortName}</p>
+            <p className="font-display text-3xl uppercase tracking-wide text-white">{site.shortName}</p>
+            <p className="font-accent text-lg text-gold">{site.tagline}</p>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">
-                Sunday Services
-              </p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">Location</p>
               <p className="mt-2 text-stone-300">
-                {site.address.street}
-                <br />
-                {site.address.city}, {site.address.country}
+                {site.address.street}<br />{site.address.city}, {site.address.country}
               </p>
             </div>
-            <Button href="/subscribe" variant="small">
-              Stay Connected
-            </Button>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">Service Times</p>
+              <ul className="mt-2 space-y-1 text-sm text-stone-400">
+                {serviceTimes.map((s) => (
+                  <li key={s.name}>{s.day} · {s.name} · {s.time}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">M-Pesa Giving</p>
+              <p className="mt-2 text-sm text-stone-400">Till {site.giving.mpesaTill} · {site.giving.accountName}</p>
+            </div>
           </div>
-
-          <div className="grid gap-8 sm:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {footerColumns.map((column) => (
               <div key={column.title}>
-                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">
-                  {column.title}
-                </p>
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold">{column.title}</p>
                 <ul className="space-y-2">
                   {column.links.map((link) => (
                     <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-sm text-stone-400 transition-colors hover:text-white"
-                      >
+                      <a href={link.href} className="text-sm text-stone-400 transition-colors hover:text-white">
                         {link.label}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -76,9 +77,15 @@ export function SiteFooter() {
             ))}
           </div>
         </div>
-
-        <div className="mt-16 border-t border-white/10 pt-8 text-sm text-stone-500">
-          <p>© {new Date().getFullYear()} {site.name}</p>
+        <div className="mt-16 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-stone-500">© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
+          <div className="flex gap-4">
+            {Object.entries(site.social).map(([network, href]) => (
+              <a key={network} href={href} target="_blank" rel="noopener noreferrer" className="text-sm capitalize text-stone-500 hover:text-gold">
+                {network}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

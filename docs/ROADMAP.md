@@ -52,7 +52,7 @@ Corrected from Kimi's 16-week estimate (+25% buffer). Target: **740 hours**.
 | Compliance & Launch | 120 |
 | **Total** | **740** |
 
-## Current status (`rpos-v4`)
+## Current status (`rpwebsite`)
 
 - [x] Repo, Vercel, Next.js 16 scaffold
 - [x] Motivation-inspired public homepage

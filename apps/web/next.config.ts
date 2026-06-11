@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      { source: "/giving", destination: "/give", permanent: true },
+      { source: "/plan-visit", destination: "/visit", permanent: true },
+      { source: "/request-prayer", destination: "/prayer", permanent: true },
+      { source: "/learn", destination: "/academy", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

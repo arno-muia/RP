@@ -1,49 +1,38 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { DecoratedText } from "@/components/ui/decorated-text";
-import { events } from "@/lib/site";
+import { getUpcomingEvents } from "@/lib/content";
+import { EventCard } from "@/components/content/event-card";
 
-export function EventsSection() {
+export async function EventsSection() {
+  const events = await getUpcomingEvents(3);
+
   return (
-    <section className="bg-white py-20 md:py-28">
+    <section className="register-warm section-padding">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
-        <h2 className="font-serif text-4xl text-stone-900 md:text-5xl">
-          Upcoming <DecoratedText>Events</DecoratedText>
-        </h2>
-
-        <div className="mt-12 grid gap-8 md:grid-cols-3">
-          {events.map((event) => (
-            <article key={event.href} className="group">
-              <Link href={event.href} className="block">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-                  <Image
-                    src={event.image}
-                    alt={event.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                </div>
-                <div className="mt-5 space-y-2">
-                  <p className="text-sm text-stone-500">{event.date}</p>
-                  <h3 className="font-serif text-2xl text-stone-900">
-                    {event.title}
-                  </h3>
-                  <p className="text-sm text-stone-500">{event.location}</p>
-                </div>
-              </Link>
-              <div className="mt-4">
-                <Button href={event.href} variant="small">
-                  Learn More
-                </Button>
-              </div>
-            </article>
-          ))}
+        <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Mark Your Calendar</p>
+            <h2 className="font-display mt-2 text-4xl uppercase tracking-wide text-white md:text-5xl">
+              Upcoming Events
+            </h2>
+          </div>
+          <Link href="/events" className="text-sm font-semibold text-gold hover:text-gold-light">
+            View All →
+          </Link>
         </div>
-
+        {events.length > 0 ? (
+          <div className="grid gap-8 md:grid-cols-3">
+            {events.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-white/70">No upcoming events at this time.</p>
+        )}
         <div className="mt-12 text-center">
-          <Button href="/events">View All Events</Button>
+          <Button href="/events" variant="secondary" className="border-white text-white hover:bg-white hover:text-burgundy">
+            View All Events
+          </Button>
         </div>
       </div>
     </section>

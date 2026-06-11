@@ -1,4 +1,4 @@
-# Migration from rpweb v3
+# Migration from rpacademy (legacy rpweb v3)
 
 Superseded by [ROADMAP.md](./ROADMAP.md). Quick status:
 

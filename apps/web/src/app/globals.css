@@ -1,18 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f4ef;
-  --foreground: #1c1917;
-  --cream: #f7f4ef;
-  --stone-muted: #78716c;
+  /* Royal Priesthood brand tokens */
+  --rp-burgundy: #5b0e0e;
+  --rp-burgundy-light: #7a1f1f;
+  --rp-gold: #b8860b;
+  --rp-gold-light: #d4a84b;
+  --rp-cream: #f5f0eb;
+  --rp-charcoal: #1a1a1a;
+  --rp-white: #ffffff;
+  --rp-gray: #6b7280;
+
+  --background: var(--rp-cream);
+  --foreground: var(--rp-charcoal);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-cream: var(--cream);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+  --color-cream: var(--rp-cream);
+  --color-burgundy: var(--rp-burgundy);
+  --color-burgundy-light: var(--rp-burgundy-light);
+  --color-gold: var(--rp-gold);
+  --color-gold-light: var(--rp-gold-light);
+  --color-charcoal: var(--rp-charcoal);
+  --color-muted: var(--rp-gray);
+
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bebas), ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-dancing), ui-serif, Georgia, serif;
 }
 
 body {
@@ -22,6 +38,63 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.font-serif {
-  font-family: var(--font-cormorant), ui-serif, Georgia, serif;
+.font-display {
+  font-family: var(--font-bebas), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.font-accent {
+  font-family: var(--font-dancing), ui-serif, Georgia, serif;
+}
+
+/* Three Visual Registers */
+.register-celestial {
+  --section-bg: var(--rp-white);
+  --section-text: var(--rp-charcoal);
+  --section-accent: var(--rp-burgundy);
+  background: var(--section-bg);
+  color: var(--section-text);
+}
+
+.register-parchment {
+  --section-bg: var(--rp-cream);
+  --section-text: var(--rp-charcoal);
+  --section-accent: var(--rp-burgundy);
+  background: var(--section-bg);
+  color: var(--section-text);
+}
+
+.register-warm {
+  --section-bg: var(--rp-burgundy);
+  --section-text: var(--rp-white);
+  --section-accent: var(--rp-gold);
+  background: var(--section-bg);
+  color: var(--section-text);
+}
+
+.section-padding {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(91, 14, 14, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-hover:hover {
+    transform: none;
+  }
 }

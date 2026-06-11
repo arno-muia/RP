@@ -1,0 +1,183 @@
+{
+  "name": "Royal Priesthood Embassy",
+  "shortName": "Royal Priesthood",
+  "tagline": "Discover Your True Identity in Christ",
+  "scripture": "1 Peter 2:9",
+  "description": "Join Royal Priesthood Embassy in Thika, Kenya. A Kingdom Embassy where you are equipped to establish heaven on earth through worship, discipleship, and authentic relationships.",
+  "address": {
+    "street": "Voice of Grace, Behind Spoonzoom",
+    "city": "Thika",
+    "country": "Kenya",
+    "mapsUrl": "https://maps.app.goo.gl/PLHU6uvwqJHPG9PD6"
+  },
+  "contact": {
+    "email": "enquiries@rp.church",
+    "whatsapp": "https://wa.me/254700000000"
+  },
+  "social": {
+    "instagram": "https://www.instagram.com/royalpriesthoodembassy",
+    "facebook": "https://www.facebook.com/people/Royal-Priesthood-Embassy/61575460188005/",
+    "youtube": "https://www.youtube.com/@RoyalPriesthoodEmbassy"
+  },
+  "giving": {
+    "mpesaTill": "8598004",
+    "accountName": "Salome Njuguna Waruguru"
+  },
+  "academyUrl": "https://academy.royalpriesthood.church",
+  "theme2026": {
+    "title": "The Latter Rain",
+    "scripture": "Zechariah 10:1",
+    "scriptureText": "Ask the LORD for rain in the time of the latter rain. The LORD will make flashing clouds; He will give them showers of rain, Grass in the field for everyone.",
+    "image": "/images/posters/theme-2026-latter-rain.jpeg"
+  },
+  "serviceTimes": [
+    {
+      "name": "Sunday Online Service",
+      "day": "Sunday",
+      "time": "6:00 AM – 8:00 AM",
+      "platform": "online",
+      "location": "Google Meet",
+      "link": "https://www.youtube.com/@RoyalPriesthoodEmbassy",
+      "description": "Early morning worship and teaching for our online family. Join from anywhere in the world.",
+      "image": "/images/events/sunday-online-service-poster-1.jpeg"
+    },
+    {
+      "name": "Sunday Main Service",
+      "day": "Sunday",
+      "time": "9:00 AM",
+      "platform": "physical",
+      "location": "Voice of Grace, Behind Spoonzoom, Thika",
+      "description": "Our primary worship gathering — worship, teaching, and ministry time in the sanctuary.",
+      "image": "/images/services/kingdom-formation-2.jpg"
+    },
+    {
+      "name": "Kingdom Formation",
+      "day": "Tuesday",
+      "time": "8:30 PM",
+      "platform": "online",
+      "location": "Google Meet",
+      "link": "https://www.youtube.com/@RoyalPriesthoodEmbassy",
+      "description": "Blueprint Tuesdays — deep discipleship teaching and Holy Communion. Where Kingdom patterns are revealed.",
+      "image": "/images/events/kingdom-formation-poster.jpeg"
+    },
+    {
+      "name": "Youth Service",
+      "day": "Sunday",
+      "time": "11:30 AM",
+      "platform": "physical",
+      "location": "Youth Auditorium, Thika",
+      "description": "Dynamic service for young people with worship, teaching, and community.",
+      "image": "/images/services/kingdom-formation-4.jpg"
+    }
+  ],
+  "whatToExpect": [
+    {
+      "title": "Worship",
+      "description": "Experience authentic, Spirit-led worship that draws you into God's presence. Come as you are — no performance required.",
+      "icon": "music"
+    },
+    {
+      "title": "Teaching",
+      "description": "Practical, Bible-based teaching that equips you to walk in your royal identity and daily influence as an ambassador of the Kingdom.",
+      "icon": "book-open"
+    },
+    {
+      "title": "Community",
+      "description": "Genuine relationships with people who will welcome you, pray with you, and walk alongside you in your faith journey.",
+      "icon": "users"
+    },
+    {
+      "title": "Growth",
+      "description": "Pathways from first visit to deep discipleship through Kingdom Formation, cell groups, and ministry involvement.",
+      "icon": "trending-up"
+    }
+  ],
+  "beliefs": [
+    {
+      "id": "bible",
+      "title": "The Bible",
+      "description": "The ultimate constitution and manual for living, which God has magnified above His own name. Our final authority for faith and practice."
+    },
+    {
+      "id": "god",
+      "title": "God",
+      "description": "One God eternally existing in three persons: Father, Son, and Holy Spirit. The Creator and Sustainer of all things."
+    },
+    {
+      "id": "jesus",
+      "title": "Jesus Christ",
+      "description": "The Son of God, born of a virgin, lived a sinless life, died for our sins, and rose again. Our High Priest and Advocate."
+    },
+    {
+      "id": "holyspirit",
+      "title": "The Holy Spirit",
+      "description": "The third person of the Trinity, our Comforter, Teacher, and Guide. Leads believers into all truth through the inner witness."
+    },
+    {
+      "id": "salvation",
+      "title": "Salvation",
+      "description": "By grace through faith in Jesus Christ alone. A transition from spiritual death to being alive in Christ with a new nature."
+    },
+    {
+      "id": "sonship",
+      "title": "Sonship & Identity",
+      "description": "Believers are adopted as sons of God, receiving unconditional eternal security and the Spirit of adoption crying \"Abba Father.\""
+    }
+  ],
+  "values": [
+    {
+      "id": "identity",
+      "title": "Identity",
+      "description": "The Mantle — we are a royal priesthood, ambassadors of the Kingdom Embassy. Our identity in Christ is the foundation of everything."
+    },
+    {
+      "id": "authority",
+      "title": "Authority",
+      "description": "The Rod — we walk in the authority of God's Word, seated in heavenly places, exercising dominion through partnership with the Holy Spirit."
+    },
+    {
+      "id": "execution",
+      "title": "Execution",
+      "description": "The Sword — we are doers of the Word, executing Kingdom mandates with diligence, faith, and excellence in daily influence."
+    }
+  ],
+  "visitFaqs": [
+    {
+      "question": "What should I wear?",
+      "answer": "Come as you are! Most people dress casually or business casual. We care more about your presence than your appearance."
+    },
+    {
+      "question": "Is there parking available?",
+      "answer": "Yes, there is parking near Voice of Grace behind Spoonzoom in Thika. Our hospitality team will guide you when you arrive."
+    },
+    {
+      "question": "What about my children?",
+      "answer": "We have excellent children's ministry programs during services. Our trained volunteers create a safe, fun environment for kids to learn about Jesus."
+    },
+    {
+      "question": "How long is the service?",
+      "answer": "Services typically run 90–120 minutes, including worship, teaching, and ministry time."
+    },
+    {
+      "question": "Will I be asked to give money?",
+      "answer": "No. While we do receive offerings, there is no expectation for guests to give. Feel free to simply receive during your visit."
+    },
+    {
+      "question": "Where exactly is the church located?",
+      "answer": "We meet at Voice of Grace, behind Spoonzoom in Thika, Kenya. Use the Google Maps link on our Visit page for directions."
+    },
+    {
+      "question": "Can I watch online if I can't come in person?",
+      "answer": "Absolutely! Join our Sunday Online Service at 6:00 AM on Google Meet, or watch archived sermons on our YouTube channel."
+    },
+    {
+      "question": "What is Kingdom Formation?",
+      "answer": "Kingdom Formation is our Tuesday evening discipleship gathering at 8:30 PM. It's a deep dive into Kingdom theology and identity — open to everyone."
+    }
+  ],
+  "welcomeMessage": {
+    "title": "Welcome to the Embassy",
+    "message": "When you step into Royal Priesthood Embassy, you are entering a space where the laws of this place are not Kenya's laws — you are entering the Kingdom. Whether you're exploring faith for the first time or you've walked with Jesus for years, there is a place here for you. We can't wait to meet you.",
+    "author": "Pastor Charles Muchemi"
+  }
+}

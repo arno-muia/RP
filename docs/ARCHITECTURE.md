@@ -1,6 +1,6 @@
 # Royal Priesthood OS — Architecture
 
-Validated against the May 2026 deep research report (DeepSeek / ChatGPT / Kimi review). This document is the source of truth for `rpos-v4`.
+Validated against the May 2026 deep research report (DeepSeek / ChatGPT / Kimi review). This document is the source of truth for `rpwebsite`.
 
 ## Five non-negotiable corrections
 
@@ -59,7 +59,7 @@ Do not sunset Expo until PWA Background Sync is reliable on iOS Safari and entry
 
 ## References
 
-- Port lineage: `ken-muritu/rpweb` (`apps/rpos-v3`)
+- Port lineage: `ken-muritu/rpacademy` (legacy `rpweb`, `apps/rpos-v3`)
 - Design (public layer): Motivation Church patterns in `design-inspo/motivationchurch.txt`
 - Roadmap: [ROADMAP.md](./ROADMAP.md)
 - Compliance: [COMPLIANCE.md](./COMPLIANCE.md)

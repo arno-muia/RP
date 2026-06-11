@@ -1,0 +1,50 @@
+[
+  {
+    "id": "fruit-of-spirit",
+    "slug": "fruit-of-spirit",
+    "title": "Fruit of the Spirit",
+    "description": "An in-depth study of Love, Joy, and Peace as the primary character indicators of a believer",
+    "image": "/images/services/kingdom-formation-12.jpg",
+    "sermonCount": 3
+  },
+  {
+    "id": "foundations",
+    "slug": "foundations",
+    "title": "Foundations of a Believer",
+    "description": "Teachings on the core pillars of faith: Love, Hope, Wisdom, and Grace",
+    "image": "/images/services/kingdom-formation-6.jpg",
+    "sermonCount": 15
+  },
+  {
+    "id": "nature-of-priesthood",
+    "slug": "nature-of-priesthood",
+    "title": "The Nature of Priesthood",
+    "description": "An in-depth look at spiritual transactions, altars, and the protocols of God's presence",
+    "image": "/images/services/kingdom-formation-8.jpg",
+    "sermonCount": 12
+  },
+  {
+    "id": "finished-work",
+    "slug": "finished-work",
+    "title": "The Finished Work",
+    "description": "A comprehensive study of Romans 5-8, focusing on the transition from the Adamic nature to the nature of righteousness",
+    "image": "/images/services/kingdom-formation-10.jpg",
+    "sermonCount": 15
+  },
+  {
+    "id": "sonship-identity",
+    "slug": "sonship-identity",
+    "title": "Sonship - Identity",
+    "description": "A deep dive into the knowledge, confidence, and purity of heart required to walk as a son of God",
+    "image": "/images/services/kingdom-formation-1.jpg",
+    "sermonCount": 3
+  },
+  {
+    "id": "morning-devotionals",
+    "slug": "morning-devotionals",
+    "title": "Morning Devotionals",
+    "description": "Short, daily spiritual nourishment sessions covering faith, grace, light, and prayer",
+    "image": "/images/services/rain-of-mercy-3.jpg",
+    "sermonCount": 50
+  }
+]

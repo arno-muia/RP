@@ -13,45 +13,29 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-40 bg-cream transition-opacity duration-300",
-        open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
+        "fixed inset-0 z-40 bg-burgundy transition-opacity duration-300",
+        open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
       )}
       aria-hidden={!open}
     >
       <div className="flex h-full flex-col overflow-y-auto px-6 pb-10 pt-24 md:px-12">
-        <nav className="grid gap-10 lg:grid-cols-[1.2fr_1fr_1fr]">
-          <div className="space-y-1">
+        <nav className="grid gap-10 lg:grid-cols-2">
+          <div className="space-y-2">
             {navLinks.primary.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={onClose}
-                className="block font-serif text-4xl leading-tight text-stone-900 transition-opacity hover:opacity-60 md:text-5xl"
+                className="block font-display text-4xl uppercase tracking-wide text-white transition-opacity hover:opacity-70 md:text-5xl"
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          <div className="space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">
-              Ministries
-            </p>
-            {navLinks.ministries.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={onClose}
-                className="block text-base text-stone-700 hover:text-stone-900"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
                 Connect
               </p>
               {navLinks.connect.map((link) => (
@@ -59,7 +43,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                   key={link.href}
                   href={link.href}
                   onClick={onClose}
-                  className="block text-base text-stone-700 hover:text-stone-900"
+                  className="block text-base text-white/80 hover:text-white"
                 >
                   {link.label}
                 </Link>
@@ -73,12 +57,20 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm uppercase tracking-widest text-stone-600 hover:text-stone-900"
+                  className="text-sm uppercase tracking-widest text-white/60 hover:text-gold"
                 >
                   {network}
                 </a>
               ))}
             </div>
+
+            <Link
+              href="/visit"
+              onClick={onClose}
+              className="inline-flex items-center justify-center rounded-full bg-gold px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-gold-light"
+            >
+              Plan Your Visit
+            </Link>
           </div>
         </nav>
       </div>

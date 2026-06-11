@@ -1,8 +1,8 @@
 # Royal Priesthood OS v4
 
-Ministry operating system for **Royal Priesthood Embassy** — rebuilt from [rpweb](https://github.com/ken-muritu/rpweb) v3 with a research-validated architecture (May 2026).
+Ministry operating system for **Royal Priesthood Embassy** — rebuilt from [rpacademy](https://github.com/ken-muritu/rpacademy) (legacy rpweb v3) with a research-validated architecture (May 2026).
 
-**Live:** [rpos-v4.vercel.app](https://rpos-v4.vercel.app)
+**Live:** [rpwebsite.vercel.app](https://rpwebsite.vercel.app) · **Repo:** [github.com/ken-muritu/rpwebsite](https://github.com/ken-muritu/rpwebsite)
 
 ## Architecture
 
@@ -27,7 +27,7 @@ Full spec: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) · Roadmap: [docs/ROAD
 ## Monorepo
 
 ```
-rpos-v4/
+rpwebsite/
 ├── apps/web/           # Next.js app (deploy root)
 │   ├── prisma/         # 28 models incl. Household domain
 │   └── src/

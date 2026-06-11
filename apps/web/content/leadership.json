@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "name": "Pastor Charles Muchemi",
+    "role": "President, Royal Priesthood",
+    "bio": "Pastor Charles Muchemi is the visionary leader of Royal Priesthood Embassy. His teaching on Kingdom Embassy theology, ambassador identity, and sonship has transformed lives across Kenya and beyond.",
+    "photo": "/images/team/charles-muchemi.jpg",
+    "order": 1
+  },
+  {
+    "id": "2",
+    "name": "Mark Mwangi",
+    "role": "Ministry Director",
+    "bio": "Mark Mwangi serves as Ministry Director, overseeing discipleship pathways and teaching ministry with deep exposition of the Word.",
+    "photo": "/images/team/mark-mwangi.jpg",
+    "order": 2
+  },
+  {
+    "id": "3",
+    "name": "Salome Waruguru",
+    "role": "Finance Minister",
+    "bio": "Salome Waruguru leads the finance ministry with integrity and excellence, ensuring faithful stewardship of resources for Kingdom advancement.",
+    "photo": "/images/team/salome-waruguru.jpg",
+    "order": 3
+  },
+  {
+    "id": "4",
+    "name": "Lucy Auma",
+    "role": "Ministry Director",
+    "bio": "Lucy Auma serves as Ministry Director, passionate about teaching faith as a heart response to the Word.",
+    "photo": "/images/team/lucy-auma.jpg",
+    "order": 4
+  },
+  {
+    "id": "5",
+    "name": "Mercy Zawadi",
+    "role": "Ministry Director",
+    "bio": "Mercy Zawadi leads ministry initiatives focused on devotion, worship, and guarding spiritual hunger.",
+    "photo": "/images/team/mercy-zawadi.jpg",
+    "order": 5
+  },
+  {
+    "id": "6",
+    "name": "Mary Wamuyu",
+    "role": "Ministry Director",
+    "bio": "Mary Wamuyu serves in ministry leadership with a heart for consecration and worship.",
+    "photo": "/images/team/mary-wamuyu.jpg",
+    "order": 6
+  },
+  {
+    "id": "7",
+    "name": "Gloria Kimaru",
+    "role": "Hospitality Lead",
+    "bio": "Gloria Kimaru leads the hospitality team, ensuring every visitor feels welcomed and at home.",
+    "photo": "/images/team/gloria-kimaru.jpg",
+    "order": 7
+  }
+]

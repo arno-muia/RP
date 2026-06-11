@@ -1,0 +1,56 @@
+[
+  {
+    "id": "1",
+    "title": "Sonship & Identity",
+    "description": "Understanding the Spirit of Adoption and your identity as an heir of God.",
+    "instructor": "Charles Muchemi",
+    "lessonsCount": 2,
+    "duration": "1 hour",
+    "order": 1
+  },
+  {
+    "id": "2",
+    "title": "The Ministry of the Word",
+    "description": "Training the spirit man through meditation and applying the Word as a life manual.",
+    "instructor": "Charles Muchemi",
+    "lessonsCount": 3,
+    "duration": "1.5 hours",
+    "order": 2
+  },
+  {
+    "id": "3",
+    "title": "Foundations of Prayer",
+    "description": "Developing a lifestyle of prayer as fellowship and communion with the Father.",
+    "instructor": "Lucy Auma",
+    "lessonsCount": 2,
+    "duration": "1 hour",
+    "order": 3
+  },
+  {
+    "id": "4",
+    "title": "Sensitivity to the Spirit",
+    "description": "Learning to discern and follow the leading of the Holy Spirit in daily life.",
+    "instructor": "Charles Muchemi",
+    "lessonsCount": 3,
+    "duration": "1.5 hours",
+    "order": 4
+  },
+  {
+    "id": "5",
+    "title": "Spiritual Gifts",
+    "description": "Discovering, developing, and deploying your spiritual gifts for Kingdom impact.",
+    "instructor": "Mark Mwangi",
+    "lessonsCount": 3,
+    "duration": "1.5 hours",
+    "order": 5
+  },
+  {
+    "id": "6",
+    "title": "Dominion through Partnership",
+    "description": "Understanding the power of covenant relationships and strategic alliances.",
+    "instructor": "Mark Mwangi",
+    "lessonsCount": 3,
+    "duration": "1.5 hours",
+    "order": 6
+  }
+]
