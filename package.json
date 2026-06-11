@@ -1,0 +1,19 @@
+{
+  "name": "rpos-v4",
+  "private": true,
+  "version": "4.0.0",
+  "description": "Royal Priesthood OS v4 — Ministry Operating System rebuild",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspace=apps/web",
+    "lint": "npm run lint --workspace=apps/web",
+    "type-check": "npm run type-check --workspace=apps/web"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
