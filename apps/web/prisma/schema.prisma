@@ -1,0 +1,1018 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Turso LibSQL adapter configuration (used in lib/prisma.ts)
+
+// ─── ENUMS ───────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  HOSPITALITY
+  LEADERSHIP
+  CELL_LEADER
+  MEMBER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+}
+
+enum DiscipleshipLevel {
+  SEEKER
+  NEW_BELIEVER
+  DISCIPLE
+  LEADER
+  MINISTER
+}
+
+enum MemberStatus {
+  ACTIVE
+  INACTIVE
+  TRANSFERRED
+  DECEASED
+}
+
+enum HouseholdRole {
+  HEAD
+  SPOUSE
+  CHILD
+  EXTENDED
+}
+
+enum HouseholdStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum SessionType {
+  SUNDAY_SERVICE
+  MIDWEEK
+  SPECIAL_EVENT
+  ONLINE
+}
+
+enum SessionStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  CANCELLED
+}
+
+enum CheckInMethod {
+  QR_SCAN
+  MANUAL_ENTRY
+  SELF_CHECKIN
+  ADMIN_BULK
+}
+
+enum VisitorSource {
+  INVITE
+  SOCIAL_MEDIA
+  WALK_IN
+  EVENT
+  ONLINE
+}
+
+enum FollowUpStatus {
+  PENDING
+  CONTACTED
+  VISITED
+  CONNECTED
+  ASSIMILATED
+}
+
+enum FollowUpType {
+  FIRST_VISIT
+  PHONE_CALL
+  CELL_GROUP_INVITE
+  PASTORAL_VISIT
+}
+
+enum FollowUpTaskStatus {
+  PENDING
+  COMPLETED
+  OVERDUE
+  CANCELLED
+}
+
+enum CellGroupStatus {
+  ACTIVE
+  INACTIVE
+  FULL
+}
+
+enum CellGroupRole {
+  MEMBER
+  ASSISTANT_LEADER
+  LEADER
+}
+
+enum CellGroupMembershipStatus {
+  ACTIVE
+  INACTIVE
+  TRANSFERRED
+}
+
+enum GivingMethod {
+  M_PESA
+  BANK_TRANSFER
+  CASH
+  CHEQUE
+  CARD
+  OTHER
+}
+
+enum GivingFund {
+  TITHE
+  OFFERING
+  MISSIONS
+  BUILDING
+  SPECIAL
+  SEED
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum RecurringFrequency {
+  WEEKLY
+  MONTHLY
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  FILL_BLANK
+  MATCHING
+}
+
+enum ChurchEventType {
+  SERVICE
+  FELLOWSHIP
+  OUTREACH
+  CONFERENCE
+  FUNDRAISER
+  OTHER
+}
+
+enum ChurchEventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  WAIVED
+}
+
+enum AssignmentStatus {
+  ACTIVE
+  INACTIVE
+  PENDING_APPROVAL
+}
+
+enum CareCaseType {
+  BEREAVEMENT
+  ILLNESS
+  FINANCIAL_CRISIS
+  MARITAL
+  SPIRITUAL
+  OTHER
+}
+
+enum CarePriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum CareCaseStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum AnnouncementPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum TargetAudience {
+  ALL
+  MEMBERS
+  LEADERS
+  CELL_LEADERS
+  YOUTH
+  NEWCOMERS
+}
+
+enum MessageType {
+  SMS
+  EMAIL
+  PUSH
+}
+
+enum MessageStatus {
+  QUEUED
+  SENT
+  DELIVERED
+  FAILED
+}
+
+enum PrayerCategory {
+  HEALING
+  FINANCIAL
+  RELATIONSHIP
+  SPIRITUAL
+  FAMILY
+  MINISTRY
+  OTHER
+}
+
+enum PrayerStatus {
+  ACTIVE
+  ANSWERED
+  CLOSED
+}
+
+enum AuditAction {
+  LOGIN
+  LOGOUT
+  PASSWORD_CHANGE
+  ACCOUNT_LOCKED
+  ACCOUNT_UNLOCKED
+  MEMBER_CREATE
+  MEMBER_UPDATE
+  MEMBER_DELETE
+  MEMBER_RESTORE
+  HOUSEHOLD_CREATE
+  HOUSEHOLD_UPDATE
+  ATTENDANCE_CHECKIN
+  SESSION_OPEN
+  SESSION_CLOSE
+  GIVING_RECORD
+  GIVING_UPDATE
+  GIVING_DELETE
+  FUND_CREATE
+  FUND_UPDATE
+  EVENT_CREATE
+  EVENT_UPDATE
+  EVENT_DELETE
+  ANNOUNCEMENT_CREATE
+  ANNOUNCEMENT_UPDATE
+  ROLE_ASSIGN
+  USER_INVITE
+  USER_ACTIVATE
+  USER_DEACTIVATE
+  SETTINGS_CHANGE
+  EXPORT_DATA
+  IMPORT_DATA
+  CONSENT_COLLECTED
+  CARE_CASE_CREATE
+  CARE_CASE_UPDATE
+  CARE_NOTE_CREATE
+  VOLUNTEER_ASSIGN
+  PRAYER_REQUEST_CREATE
+  PRAYER_REQUEST_ANSWERED
+  COMMUNICATION_SENT
+}
+
+// ─── CORE IDENTITY DOMAIN ────────────────────────────────────────────────────
+
+model User {
+  id                   String    @id @default(uuid())
+  email                String    @unique
+  passwordHash         String
+  name                 String
+  role                 UserRole  @default(MEMBER)
+  isActive             Boolean   @default(true)
+  mustChangePassword   Boolean   @default(true)
+  failedLoginAttempts  Int       @default(0)
+  lockedUntil          DateTime?
+  lastLogin            DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  // Relations
+  member               Member?
+  auditLogs            AuditLog[]
+  createdMembers       Member[]        @relation("MemberCreatedBy")
+  updatedMembers       Member[]        @relation("MemberUpdatedBy")
+  createdHouseholds    Household[]     @relation("HouseholdCreatedBy")
+  updatedHouseholds    Household[]     @relation("HouseholdUpdatedBy")
+  createdVisitors      Visitor[]       @relation("VisitorCreatedBy")
+  visitorsAssigned     Visitor[]       @relation("VisitorAssignedTo")
+  followUpsAssigned    FollowUp[]      @relation("FollowUpAssignedTo")
+  serviceSessions      ServiceSession[] @relation("SessionCreatedBy")
+  checkIns             Attendance[]    @relation("CheckInBy")
+  createdTransactions  GivingTransaction[] @relation("TransactionCreatedBy")
+  createdEvents        ChurchEvent[]   @relation("EventCreatedBy")
+  createdAnnouncements Announcement[]  @relation("AnnouncementCreatedBy")
+  createdCareCases     CareCase[]      @relation("CareCaseCreatedBy")
+  careCasesAssigned    CareCase[]      @relation("CareCaseAssignedTo")
+  careNotes            CareNote[]      @relation("CareNoteAuthor")
+  messageLogs          MessageLog[]    @relation("MessageCreatedBy")
+  systemConfigs        SystemConfig[]  @relation("ConfigUpdatedBy")
+}
+
+model Member {
+  id                String            @id @default(uuid())
+  firstName         String
+  lastName          String
+  email             String?           @unique
+  phone             String?
+  gender            Gender?
+  dateOfBirth       DateTime?
+  maritalStatus     MaritalStatus?
+  membershipDate    DateTime?
+  baptismDate       DateTime?
+  discipleshipLevel DiscipleshipLevel @default(SEEKER)
+  spiritualGifts    String?           @default("")
+  ministryTeams     String?           @default("")
+  visitor           Boolean           @default(false)
+  status            MemberStatus      @default(ACTIVE)
+  cellGroupId       String?
+  householdId       String?
+  userId            String?           @unique
+  consentGiven      Boolean           @default(false)
+  consentDate       DateTime?
+  consentVersion    String?
+  profileImageUrl   String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  deletedAt         DateTime?
+  createdById       String?
+  updatedById       String?
+
+  // Relations
+  user              User?             @relation(fields: [userId], references: [id])
+  cellGroup         CellGroup?        @relation("CellGroupMembers", fields: [cellGroupId], references: [id])
+  ledCellGroups     CellGroup[]       @relation("CellGroupLeader")
+  coLedCellGroups   CellGroup[]       @relation("CellGroupCoLeader")
+  household         Household?        @relation(fields: [householdId], references: [id])
+  createdBy         User?             @relation("MemberCreatedBy", fields: [createdById], references: [id])
+  updatedBy         User?             @relation("MemberUpdatedBy", fields: [updatedById], references: [id])
+  householdMember   HouseholdMember?
+  cellGroupMembership CellGroupMembership?
+  attendances       Attendance[]
+  givingTransactions GivingTransaction[]
+  eventRegistrations EventRegistration[]
+  volunteerAssignments VolunteerAssignment[]
+  progressRecords   MemberProgress[]
+  prayerRequests    PrayerRequest[]
+  visitorRecord     Visitor?          @relation("VisitorConvertedToMember")
+  careCases         CareCase[]
+  discipleshipModules DiscipleshipModule[]
+  instructedQuizzes Quiz[]            @relation("QuizInstructor")
+  receivedMessages  MessageLog[]      @relation("MemberMessages")
+
+  @@index([householdId])
+  @@index([cellGroupId])
+  @@index([email])
+}
+
+// ─── HOUSEHOLD DOMAIN (FIRST-CLASS) ──────────────────────────────────────────
+
+model Household {
+  id              String          @id @default(uuid())
+  householdName   String?
+  address         Json?           // { street, city, postalCode, country }
+  phone           String?
+  email           String?
+  anniversaryDate DateTime?
+  status          HouseholdStatus @default(ACTIVE)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  deletedAt       DateTime?
+  createdById     String?
+  updatedById     String?
+
+  // Relations
+  members         HouseholdMember[]
+  membersDirect     Member[]
+  givingTransactions GivingTransaction[]
+  careCases         CareCase[]
+  createdBy         User?           @relation("HouseholdCreatedBy", fields: [createdById], references: [id])
+  updatedBy         User?           @relation("HouseholdUpdatedBy", fields: [updatedById], references: [id])
+
+  @@index([status])
+}
+
+model HouseholdMember {
+  householdId      String
+  memberId         String        @unique
+  role             HouseholdRole @default(EXTENDED)
+  canPickUp        Boolean       @default(false)
+  isPrimaryContact Boolean       @default(false)
+  joinedAt         DateTime      @default(now())
+
+  // Relations
+  household        Household     @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  member           Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@id([householdId, memberId])
+  @@index([memberId])
+  @@index([householdId])
+}
+
+// ─── ATTENDANCE & SESSIONS DOMAIN ────────────────────────────────────────────
+
+model ServiceSession {
+  id          String        @id @default(uuid())
+  name        String
+  type        SessionType
+  startTime   DateTime
+  endTime     DateTime?
+  location    String?
+  qrToken     String?       @unique
+  status      SessionStatus @default(DRAFT)
+  campusId    String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  createdById String?
+
+  // Relations
+  attendances Attendance[]
+  visitors    Visitor[]
+  createdBy   User?         @relation("SessionCreatedBy", fields: [createdById], references: [id])
+
+  @@index([startTime])
+  @@index([status])
+  @@index([campusId])
+}
+
+model Attendance {
+  id            String        @id @default(uuid())
+  memberId      String?
+  visitorId     String?
+  sessionId     String
+  method        CheckInMethod
+  checkedInById String?
+  notes         String?
+  offlineSynced Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  member        Member?       @relation(fields: [memberId], references: [id])
+  visitor       Visitor?      @relation(fields: [visitorId], references: [id])
+  session       ServiceSession @relation(fields: [sessionId], references: [id])
+  checkedInBy   User?         @relation("CheckInBy", fields: [checkedInById], references: [id])
+
+  @@unique([memberId, sessionId])
+  @@unique([visitorId, sessionId])
+  @@index([sessionId])
+  @@index([memberId])
+  @@index([createdAt])
+}
+
+// ─── VISITOR DOMAIN ──────────────────────────────────────────────────────────
+
+model Visitor {
+  id                  String          @id @default(uuid())
+  firstName           String
+  lastName            String
+  email               String?
+  phone               String?
+  gender              Gender?
+  dateOfBirth         DateTime?
+  source              VisitorSource
+  heardAboutDetail    String?
+  sessionId           String
+  followUpStatus      FollowUpStatus  @default(PENDING)
+  assignedToId        String?
+  convertedToMemberId String?         @unique
+  consentGiven        Boolean         @default(false)
+  consentDate         DateTime?
+  visitCount          Int             @default(1)
+  lastVisitDate       DateTime?
+  notes               String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  createdById         String?
+
+  // Relations
+  session             ServiceSession  @relation(fields: [sessionId], references: [id])
+  assignedTo          User?           @relation("VisitorAssignedTo", fields: [assignedToId], references: [id])
+  convertedToMember   Member?         @relation("VisitorConvertedToMember", fields: [convertedToMemberId], references: [id])
+  createdBy           User?           @relation("VisitorCreatedBy", fields: [createdById], references: [id])
+  followUps           FollowUp[]
+  attendances         Attendance[]
+
+  @@index([followUpStatus])
+  @@index([assignedToId])
+  @@index([sessionId])
+}
+
+model FollowUp {
+  id            String            @id @default(uuid())
+  visitorId     String
+  type          FollowUpType
+  assignedToId  String
+  dueDate       DateTime
+  completedDate DateTime?
+  status        FollowUpTaskStatus  @default(PENDING)
+  notes         String?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  // Relations
+  visitor       Visitor           @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  assignedTo    User              @relation("FollowUpAssignedTo", fields: [assignedToId], references: [id])
+
+  @@index([visitorId])
+  @@index([assignedToId])
+  @@index([dueDate])
+  @@index([status])
+}
+
+// ─── CELL GROUPS DOMAIN ──────────────────────────────────────────────────────
+
+model CellGroup {
+  id           String                @id @default(uuid())
+  name         String
+  meetingDay   String?
+  meetingTime  String?
+  location     String?
+  description  String?
+  leaderId     String
+  coLeaderId   String?
+  maxCapacity  Int?
+  status       CellGroupStatus       @default(ACTIVE)
+  campusId     String?
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+
+  // Relations
+  leader       Member                @relation("CellGroupLeader", fields: [leaderId], references: [id])
+  coLeader     Member?               @relation("CellGroupCoLeader", fields: [coLeaderId], references: [id])
+  memberships  CellGroupMembership[]
+  members      Member[]              @relation("CellGroupMembers")
+
+  @@index([status])
+  @@index([campusId])
+}
+
+model CellGroupMembership {
+  id           String                     @id @default(uuid())
+  cellGroupId  String
+  memberId     String                     @unique
+  joinDate     DateTime                   @default(now())
+  role         CellGroupRole              @default(MEMBER)
+  status       CellGroupMembershipStatus  @default(ACTIVE)
+  createdAt    DateTime                   @default(now())
+  updatedAt    DateTime                   @updatedAt
+
+  // Relations
+  cellGroup    CellGroup                  @relation(fields: [cellGroupId], references: [id], onDelete: Cascade)
+  member       Member                     @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([cellGroupId])
+  @@index([memberId])
+}
+
+// ─── GIVING DOMAIN (INTEGER CENTS) ───────────────────────────────────────────
+
+model GivingTransaction {
+  id                 String            @id @default(uuid())
+  memberId           String?
+  householdId        String?
+  amountCents        Int               // Integer cents - KES 1000 = 100000
+  currency           String            @default("KES")
+  method             GivingMethod
+  fund               GivingFund
+  reference          String?
+  status             TransactionStatus @default(PENDING)
+  mpesaRequestId     String?
+  mpesaCallbackData  Json?
+  failureReason      String?
+  isRecurring        Boolean           @default(false)
+  recurringFrequency RecurringFrequency?
+  recurringEndDate   DateTime?
+  completedAt        DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  createdById        String?
+
+  // Relations
+  member             Member?           @relation(fields: [memberId], references: [id])
+  household          Household?        @relation(fields: [householdId], references: [id])
+  createdBy          User?             @relation("TransactionCreatedBy", fields: [createdById], references: [id])
+
+  @@index([memberId])
+  @@index([householdId])
+  @@index([status])
+  @@index([fund])
+  @@index([createdAt])
+  @@index([mpesaRequestId])
+}
+
+model GivingCampaign {
+  id                 String      @id @default(uuid())
+  name               String
+  description        String?
+  fund               GivingFund
+  targetAmountCents  Int?
+  currentAmountCents Int         @default(0)
+  startDate          DateTime
+  endDate            DateTime?
+  isActive           Boolean     @default(true)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  @@index([fund])
+  @@index([isActive])
+  @@index([endDate])
+}
+
+// ─── DISCIPLESHIP (LMS) DOMAIN ───────────────────────────────────────────────
+
+model DiscipleshipModule {
+  id                   String                @id @default(uuid())
+  title                String
+  description          String?
+  instructorId         String?
+  sortOrder            Int                   @default(0)
+  prerequisiteModuleId String?
+  estimatedHours       Int?
+  certificateTemplate  String?
+  isPublished          Boolean               @default(false)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+
+  // Relations
+  instructor           Member?               @relation(fields: [instructorId], references: [id])
+  prerequisiteModule   DiscipleshipModule?   @relation("ModulePrerequisite", fields: [prerequisiteModuleId], references: [id])
+  nextModules          DiscipleshipModule[]  @relation("ModulePrerequisite")
+  lessons              DiscipleshipLesson[]
+
+  @@index([isPublished])
+  @@index([sortOrder])
+}
+
+model DiscipleshipLesson {
+  id                    String               @id @default(uuid())
+  moduleId              String
+  title                 String
+  content               String?
+  videoUrl              String?
+  audioUrl              String?
+  downloadableResources Json?                // Array of { name, url }
+  sortOrder             Int                  @default(0)
+  durationMinutes       Int?
+  isPublished           Boolean              @default(false)
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+
+  // Relations
+  module                DiscipleshipModule   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  progressRecords       MemberProgress[]
+  quiz                  Quiz?
+
+  @@index([moduleId])
+  @@index([isPublished])
+  @@index([sortOrder])
+}
+
+model MemberProgress {
+  id            String        @id @default(uuid())
+  memberId      String
+  lessonId      String
+  status        ProgressStatus @default(NOT_STARTED)
+  startedAt     DateTime?
+  completedAt   DateTime?
+  quizScore     Int?
+  quizAttempts  Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  member        Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  lesson        DiscipleshipLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, lessonId])
+  @@index([memberId])
+  @@index([lessonId])
+  @@index([status])
+}
+
+model Quiz {
+  id            String         @id @default(uuid())
+  lessonId      String         @unique
+  instructorId  String?
+  title         String
+  passingScore  Int            @default(70)
+  maxAttempts   Int?
+  shuffleQuestions Boolean     @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  // Relations
+  lesson        DiscipleshipLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  instructor    Member?            @relation("QuizInstructor", fields: [instructorId], references: [id])
+  questions     QuizQuestion[]
+}
+
+model QuizQuestion {
+  id             String      @id @default(uuid())
+  quizId         String
+  type           QuestionType
+  questionText   String
+  options        Json?       // Array of answer choices
+  correctAnswer  Json        // Correct answer data structure
+  explanation    String?
+  points         Int         @default(1)
+  sortOrder      Int         @default(0)
+  createdAt      DateTime    @default(now())
+
+  // Relations
+  quiz           Quiz        @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId])
+  @@index([sortOrder])
+}
+
+// ─── EVENTS & CALENDAR DOMAIN ────────────────────────────────────────────────
+
+model ChurchEvent {
+  id                  String           @id @default(uuid())
+  title               String
+  description         String?
+  type                ChurchEventType
+  startDateTime       DateTime
+  endDateTime         DateTime?
+  location            String?
+  imageUrl            String?
+  galleryUrl          String?
+  registrationRequired Boolean         @default(false)
+  maxAttendees        Int?
+  costCents           Int?             // Integer cents for paid events
+  registrationOpenDate DateTime?
+  status              ChurchEventStatus @default(DRAFT)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  createdById         String?
+
+  // Relations
+  registrations       EventRegistration[]
+  createdBy           User?            @relation("EventCreatedBy", fields: [createdById], references: [id])
+
+  @@index([startDateTime])
+  @@index([status])
+  @@index([type])
+}
+
+model EventRegistration {
+  id             String         @id @default(uuid())
+  memberId       String?
+  eventId        String
+  walkInName     String?
+  walkInPhone    String?
+  walkInEmail    String?
+  registrationDate DateTime     @default(now())
+  attended       Boolean?
+  paymentStatus  PaymentStatus?
+  notes          String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // Relations
+  member         Member?        @relation(fields: [memberId], references: [id])
+  event          ChurchEvent    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+  @@index([memberId])
+  @@index([registrationDate])
+}
+
+// ─── VOLUNTEERS DOMAIN ───────────────────────────────────────────────────────
+
+model VolunteerRole {
+  id           String              @id @default(uuid())
+  name         String
+  description  String?
+  department   String?
+  requirements String?
+  isActive     Boolean             @default(true)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  // Relations
+  assignments  VolunteerAssignment[]
+
+  @@index([isActive])
+  @@index([department])
+}
+
+model VolunteerAssignment {
+  id         String            @id @default(uuid())
+  memberId   String
+  roleId     String
+  startDate  DateTime
+  endDate    DateTime?
+  status     AssignmentStatus  @default(ACTIVE)
+  notes      String?
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  // Relations
+  member     Member            @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  role       VolunteerRole     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@index([memberId])
+  @@index([roleId])
+  @@index([status])
+}
+
+// ─── PASTORAL CARE DOMAIN ────────────────────────────────────────────────────
+
+model CareCase {
+  id            String        @id @default(uuid())
+  householdId   String?
+  memberId      String?
+  title         String
+  description   String?
+  type          CareCaseType
+  priority      CarePriority  @default(MEDIUM)
+  status        CareCaseStatus @default(OPEN)
+  assignedToId  String?
+  openedDate    DateTime      @default(now())
+  resolvedDate  DateTime?
+  confidential  Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  createdById   String?
+
+  // Relations
+  household     Household?    @relation(fields: [householdId], references: [id])
+  member        Member?       @relation(fields: [memberId], references: [id])
+  assignedTo    User?         @relation("CareCaseAssignedTo", fields: [assignedToId], references: [id])
+  createdBy     User?         @relation("CareCaseCreatedBy", fields: [createdById], references: [id])
+  notes         CareNote[]
+
+  @@index([householdId])
+  @@index([memberId])
+  @@index([status])
+  @@index([priority])
+  @@index([assignedToId])
+}
+
+model CareNote {
+  id          String    @id @default(uuid())
+  careCaseId  String
+  note        String
+  authorId    String
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  careCase    CareCase  @relation(fields: [careCaseId], references: [id], onDelete: Cascade)
+  author      User      @relation("CareNoteAuthor", fields: [authorId], references: [id])
+
+  @@index([careCaseId])
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+// ─── COMMUNICATIONS DOMAIN ───────────────────────────────────────────────────
+
+model Announcement {
+  id             String                @id @default(uuid())
+  title          String
+  content        String
+  priority       AnnouncementPriority  @default(NORMAL)
+  displayFrom    DateTime
+  displayUntil   DateTime?
+  targetAudience TargetAudience        @default(ALL)
+  imageUrl       String?
+  linkUrl        String?
+  isActive       Boolean               @default(true)
+  createdById    String?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  // Relations
+  createdBy      User?                 @relation("AnnouncementCreatedBy", fields: [createdById], references: [id])
+
+  @@index([isActive])
+  @@index([displayFrom])
+  @@index([targetAudience])
+}
+
+model MessageLog {
+  id            String        @id @default(uuid())
+  recipientId   String?
+  type          MessageType
+  subject       String?
+  body          String
+  status        MessageStatus @default(QUEUED)
+  sentAt        DateTime?
+  deliveredAt   DateTime?
+  failedAt      DateTime?
+  failureReason String?
+  externalId    String?
+  createdAt     DateTime      @default(now())
+  createdById   String?
+
+  // Relations
+  recipient     Member?       @relation("MemberMessages", fields: [recipientId], references: [id])
+  createdBy     User?         @relation("MessageCreatedBy", fields: [createdById], references: [id])
+
+  @@index([recipientId])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+}
+
+// ─── PRAYER DOMAIN ───────────────────────────────────────────────────────────
+
+model PrayerRequest {
+  id            String         @id @default(uuid())
+  requesterId   String?
+  title         String
+  content       String
+  category      PrayerCategory?
+  isAnonymous   Boolean        @default(false)
+  isPublic      Boolean        @default(false)
+  status        PrayerStatus   @default(ACTIVE)
+  prayerCount   Int            @default(0)
+  answeredDate  DateTime?
+  answeredNote  String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  // Relations
+  requester     Member?        @relation(fields: [requesterId], references: [id])
+
+  @@index([requesterId])
+  @@index([status])
+  @@index([category])
+  @@index([isPublic])
+}
+
+// ─── AUDIT & SYSTEM DOMAIN ───────────────────────────────────────────────────
+
+model AuditLog {
+  id          String     @id @default(cuid())
+  userId      String?
+  action      AuditAction
+  entityType  String
+  entityId    String?
+  details     Json?
+  ipAddress   String?
+  userAgent   String?
+  timestamp   DateTime   @default(now())
+
+  // Relations
+  user        User?      @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([action])
+  @@index([entityType])
+  @@index([timestamp])
+  @@index([entityId])
+}
+
+model SystemConfig {
+  id          String    @id @default(uuid())
+  key         String    @unique
+  value       Json
+  description String?
+  updatedAt   DateTime  @updatedAt
+  updatedById String?
+
+  // Relations
+  updatedBy   User?     @relation("ConfigUpdatedBy", fields: [updatedById], references: [id])
+
+  @@index([key])
+}

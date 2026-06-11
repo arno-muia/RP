@@ -1,31 +1,34 @@
-# v3 → v4 Migration Plan
+# Migration from rpweb v3
 
-## Phase 1 — Foundation (current)
+Superseded by [ROADMAP.md](./ROADMAP.md). Quick status:
 
-- [x] Private repo `ken-muritu/rpos-v4`
-- [x] Next.js 15 scaffold at `apps/web`
-- [x] Vercel project linked
-- [ ] Prisma schema port from `apps/rpos-v3/prisma/schema.prisma`
-- [ ] `lib/` core modules (prisma lazy proxy, auth, rbac, mpesa)
-- [ ] Public marketing pages with design-system tokens from `design-inspo/`
+## Ported to v4
 
-## Phase 2 — Ministry features
+- [x] Prisma schema (`apps/web/prisma/schema.prisma`) — 28 models, Household domain
+- [x] `lib/prisma.ts` lazy Turso/SQLite client
+- [x] `lib/rbac.ts` + middleware three-layer protection
+- [x] `lib/auth.ts` + `auth-edge.ts` + magic-link tokens
+- [x] Route groups: `(public)`, `(member)`, `(ops)`
+- [x] Motivation-inspired public homepage
 
-Port route groups from v3:
+## Next (Phase 1)
 
-- `(public)/` — home, visit, giving, events, sermons, learn, check-in
-- `(member)/` — dashboard, household, giving history, discipleship
-- `(ops)/` — CRM, attendance, care, campaigns, reports
+- [ ] Turso production + Vercel env vars
+- [ ] `prisma/seed.ts` + login UI
+- [ ] Port remaining `(public)` pages from v3
+- [ ] Member household view wired to Prisma
+- [ ] Ops KPI dashboard
 
-## Phase 3 — Mobile + desktop
+## Deferred
 
-- Expo app consuming `/api/mobile/*` JWT endpoints
-- Tauri desktop shell for kiosk check-in and offline staff tools
+- M-Pesa sandbox (Week 8)
+- Inngest jobs (Week 9)
+- Expo app monorepo package (Phase 3)
+- Tauri kiosk (post-Expo evaluation)
 
-## Technical debt to avoid (from v3 forensic review)
+## v3 debt not carried forward
 
-- Remove stale `netlify.toml`
-- Align Next.js version at monorepo root and app level
-- Use Prisma migrations instead of `db:push` only
-- Exclude `dev.db` from git
-- Fix Android CI asset paths before re-enabling APK workflow
+- Stale `netlify.toml`
+- `dev.db` in git
+- Root/app Next.js version skew
+- `db:push` only — adopt migrations before production cutover
