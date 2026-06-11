@@ -26,14 +26,16 @@ rpos-v4/
 └── vercel.json
 ```
 
-## Design references
+## Design direction
 
-Public marketing UI draws from saved snapshots of:
+Public marketing UI follows **Motivation Church** patterns (see `design-inspo/motivationchurch.txt`):
 
-- **VOUS Church** — video hero, announcement bar, horizontal location carousel
-- **Austin Stone** — multi-campus nav, marquee imagery, structured schema.org data
-- **Elevation Church** — MUI-based polish, search, responsive image CDN patterns
-- **Motivation Church** — serif/sans pairing (Cormorant + Inter), warm editorial feel
+- Cormorant Garamond + Inter typography
+- Warm cream backgrounds (`#f7f4ef`)
+- Full-bleed hero with service times + “New Here?” CTA
+- Italic serif accent words (“Love *God.* Love *People.*”)
+- Offset image pairs, event cards, ministry photo grid
+- Latest sermon block + visit invitation section
 
 ## Development
 
