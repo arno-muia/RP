@@ -28,14 +28,17 @@ export function SiteHeader() {
         )}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 md:px-8">
-          <Link
-            href="/"
-            className={cn(
-              "font-display text-xl uppercase tracking-wider md:text-2xl",
-              scrolled ? "text-burgundy" : "text-white",
-            )}
-          >
-            {site.shortName}
+          <Link href="/" className="flex shrink-0 items-center">
+            <img
+              src="/rp-logo.svg"
+              alt={site.name}
+              width={180}
+              height={48}
+              className={cn(
+                "h-10 w-auto md:h-11",
+                scrolled ? "" : "brightness-0 invert",
+              )}
+            />
           </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">

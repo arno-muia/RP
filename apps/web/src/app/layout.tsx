@@ -41,6 +41,13 @@ export const metadata: Metadata = {
     url: "https://rpwebsite.vercel.app",
     siteName: site.name,
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({

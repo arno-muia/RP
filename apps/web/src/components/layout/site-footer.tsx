@@ -39,7 +39,13 @@ export async function SiteFooter() {
       <div className="mx-auto max-w-7xl px-5 py-16 md:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr]">
           <div className="space-y-6">
-            <p className="font-display text-3xl uppercase tracking-wide text-white">{site.shortName}</p>
+            <img
+              src="/rp-logo.svg"
+              alt={site.name}
+              width={220}
+              height={56}
+              className="h-12 w-auto brightness-0 invert"
+            />
             <p className="font-accent text-lg text-gold">{site.tagline}</p>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">Location</p>
