@@ -44,7 +44,7 @@ export async function SiteFooter() {
               alt={site.name}
               width={220}
               height={56}
-              className="h-12 w-auto brightness-0 invert"
+              className="h-12 w-auto"
             />
             <p className="font-accent text-lg text-gold">{site.tagline}</p>
             <div>
