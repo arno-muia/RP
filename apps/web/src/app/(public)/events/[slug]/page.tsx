@@ -1,14 +1,17 @@
 import { notFound } from "next/navigation";
 import { PageHero } from "@/components/shared/page-hero";
 import { Button } from "@/components/ui/button";
-import { getEventsSync, getEventBySlug, formatEventDate } from "@/lib/content";
+import { getEvents, getEventBySlug, formatEventDate } from "@/lib/content";
 import { createPageMetadata } from "@/lib/seo";
 import Image from "next/image";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  return getEventsSync().map((e) => ({ slug: e.slug }));
+  const events = await getEvents();
+  return events.map((e) => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({ params }: Props) {

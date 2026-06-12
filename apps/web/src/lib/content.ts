@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import siteData from "../../content/site.json";
 import sermonsData from "../../content/sermons.json";
 import seriesData from "../../content/series.json";
@@ -7,6 +8,7 @@ import testimonialsData from "../../content/testimonials.json";
 import academyModulesData from "../../content/academy-modules.json";
 import { getPrisma } from "@/lib/prisma";
 import { images } from "@/lib/images";
+import { eventSlug } from "@/lib/slug";
 import type {
   AcademyModule,
   Belief,
@@ -91,7 +93,7 @@ function mapDbEvent(row: {
 
   return {
     id: row.id,
-    slug: row.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
+    slug: eventSlug(row.title, row.id),
     title: row.title,
     description: row.description ?? "",
     date: row.startDateTime.toISOString().split("T")[0],
@@ -115,6 +117,13 @@ async function dbAvailable(): Promise<boolean> {
   }
 }
 
+/** DB-first: use JSON only when Turso is unreachable (local dev). */
+function useJsonFallback(): boolean {
+  return process.env.NODE_ENV !== "production";
+}
+
+const CACHE_TTL = 60;
+
 export async function getSiteConfig(): Promise<SiteData> {
   if (await dbAvailable()) {
     const config = await getPrisma().systemConfig.findUnique({ where: { key: "site" } });
@@ -131,12 +140,29 @@ export async function getHeroImage(): Promise<string> {
   return images.hero;
 }
 
-export async function getServiceTimes(): Promise<ServiceTime[]> {
+async function fetchServiceTimes(): Promise<ServiceTime[]> {
   if (await dbAvailable()) {
     const config = await getPrisma().systemConfig.findUnique({ where: { key: "serviceTimes" } });
-    if (config?.value) return config.value as unknown as ServiceTime[];
+    if (config?.value) {
+      const v = config.value;
+      if (typeof v === "string") {
+        try {
+          return JSON.parse(v) as ServiceTime[];
+        } catch {
+          return siteJson.serviceTimes;
+        }
+      }
+      return v as unknown as ServiceTime[];
+    }
   }
   return siteJson.serviceTimes;
+}
+
+export async function getServiceTimes(): Promise<ServiceTime[]> {
+  return unstable_cache(fetchServiceTimes, ["content-service-times"], {
+    tags: ["site-config"],
+    revalidate: CACHE_TTL,
+  })();
 }
 
 export async function getWhatToExpect(): Promise<WhatToExpectItem[]> {
@@ -171,25 +197,50 @@ export async function getVisitFaqs(): Promise<FaqItem[]> {
   return siteJson.visitFaqs;
 }
 
-export async function getWelcomeMessage() {
+async function fetchWelcomeMessage() {
   if (await dbAvailable()) {
     const config = await getPrisma().systemConfig.findUnique({ where: { key: "welcomeMessage" } });
-    if (config?.value) return config.value as unknown as SiteData["welcomeMessage"];
+    if (config?.value) {
+      const v = config.value;
+      if (typeof v === "string") {
+        try {
+          return JSON.parse(v) as SiteData["welcomeMessage"];
+        } catch {
+          return { title: "Welcome", message: v, author: "Pastor Charles" };
+        }
+      }
+      return v as unknown as SiteData["welcomeMessage"];
+    }
   }
   return siteJson.welcomeMessage;
 }
 
-export async function getSermons(): Promise<Sermon[]> {
+export async function getWelcomeMessage() {
+  return unstable_cache(fetchWelcomeMessage, ["content-welcome"], {
+    tags: ["site-config"],
+    revalidate: CACHE_TTL,
+  })();
+}
+
+async function fetchSermons(): Promise<Sermon[]> {
   if (await dbAvailable()) {
     const rows = await getPrisma().publicSermon.findMany({
       where: { isPublished: true },
       orderBy: { date: "desc" },
     });
-    if (rows.length > 0) return rows.map(mapDbSermon);
+    return rows.map(mapDbSermon);
   }
+  if (!useJsonFallback()) return [];
   return (sermonsData as Sermon[])
     .filter((s) => s.published)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+export async function getSermons(): Promise<Sermon[]> {
+  return unstable_cache(fetchSermons, ["content-sermons"], {
+    tags: ["sermons"],
+    revalidate: CACHE_TTL,
+  })();
 }
 
 export async function getSermonBySlug(slug: string): Promise<Sermon | undefined> {
@@ -242,92 +293,88 @@ export async function getSermonsBySeries(seriesSlug: string): Promise<Sermon[]> 
   return sermons.filter((s) => s.seriesSlug === seriesSlug);
 }
 
-export async function getEvents(): Promise<Event[]> {
+async function fetchEvents(): Promise<Event[]> {
   if (await dbAvailable()) {
     const rows = await getPrisma().churchEvent.findMany({
       where: { status: { in: ["PUBLISHED", "COMPLETED"] } },
       orderBy: { startDateTime: "desc" },
     });
-    if (rows.length > 0) {
-      return rows.map(mapDbEvent).map((e, i) => ({
-        ...e,
-        slug: (eventsData as Event[])[i]?.slug ?? e.slug,
-      }));
-    }
+    return rows.map(mapDbEvent);
   }
+  if (!useJsonFallback()) return [];
   return (eventsData as Event[]).filter((e) => e.published);
 }
 
+export async function getEvents(): Promise<Event[]> {
+  return unstable_cache(fetchEvents, ["content-events"], {
+    tags: ["events"],
+    revalidate: CACHE_TTL,
+  })();
+}
+
 export async function getUpcomingEvents(limit?: number): Promise<Event[]> {
-  const events = (eventsData as Event[])
-    .filter((e) => e.published && (e.status === "upcoming" || e.status === "ongoing"))
+  const events = await getEvents();
+  const upcoming = events
+    .filter((e) => e.status === "upcoming" || e.status === "ongoing")
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-  if (await dbAvailable()) {
-    const rows = await getPrisma().churchEvent.findMany({
-      where: { status: "PUBLISHED", startDateTime: { gte: new Date(Date.now() - 30 * 86400000) } },
-      orderBy: { startDateTime: "asc" },
-    });
-    if (rows.length > 0) {
-      const mapped = rows.map((row, i) => {
-        const jsonEvent = (eventsData as Event[]).find((e) => e.title === row.title);
-        const base = mapDbEvent(row);
-        return { ...base, slug: jsonEvent?.slug ?? base.slug, status: jsonEvent?.status ?? base.status };
-      });
-      const filtered = mapped.filter((e) => e.status === "upcoming" || e.status === "ongoing");
-      return limit ? filtered.slice(0, limit) : filtered;
-    }
-  }
-
-  return limit ? events.slice(0, limit) : events;
+  return limit ? upcoming.slice(0, limit) : upcoming;
 }
 
 export async function getEventBySlug(slug: string): Promise<Event | undefined> {
-  const jsonEvent = (eventsData as Event[]).find((e) => e.slug === slug);
-  if (jsonEvent) return jsonEvent;
-
   const events = await getEvents();
   return events.find((e) => e.slug === slug);
 }
 
-export async function getLeadership(): Promise<Leader[]> {
+async function fetchLeadership(): Promise<Leader[]> {
   if (await dbAvailable()) {
     const rows = await getPrisma().websiteLeader.findMany({
       where: { isPublished: true },
       orderBy: { sortOrder: "asc" },
     });
-    if (rows.length > 0) {
-      return rows.map((r) => ({
-        id: r.id,
-        name: r.name,
-        role: r.role,
-        bio: r.bio,
-        photo: r.photoUrl ? r.photoUrl : undefined,
-        order: r.sortOrder,
-        social: r.social as Leader["social"],
-      }));
-    }
+    return rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      role: r.role,
+      bio: r.bio,
+      photo: r.photoUrl ? r.photoUrl : undefined,
+      order: r.sortOrder,
+      social: r.social as Leader["social"],
+    }));
   }
+  if (!useJsonFallback()) return [];
   return (leadershipData as Leader[]).sort((a, b) => a.order - b.order);
 }
 
-export async function getTestimonials(): Promise<Testimonial[]> {
+export async function getLeadership(): Promise<Leader[]> {
+  return unstable_cache(fetchLeadership, ["content-leadership"], {
+    tags: ["leadership"],
+    revalidate: CACHE_TTL,
+  })();
+}
+
+async function fetchTestimonials(): Promise<Testimonial[]> {
   if (await dbAvailable()) {
     const rows = await getPrisma().websiteTestimonial.findMany({
       where: { isPublished: true },
       orderBy: { sortOrder: "asc" },
     });
-    if (rows.length > 0) {
-      return rows.map((r) => ({
-        id: r.id,
-        quote: r.quote,
-        name: r.name,
-        role: r.role ?? undefined,
-        photo: r.photoUrl ?? undefined,
-      }));
-    }
+    return rows.map((r) => ({
+      id: r.id,
+      quote: r.quote,
+      name: r.name,
+      role: r.role ?? undefined,
+      photo: r.photoUrl ?? undefined,
+    }));
   }
+  if (!useJsonFallback()) return [];
   return testimonialsData as Testimonial[];
+}
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  return unstable_cache(fetchTestimonials, ["content-testimonials"], {
+    tags: ["testimonials"],
+    revalidate: CACHE_TTL,
+  })();
 }
 
 export async function getAcademyModules(): Promise<AcademyModule[]> {

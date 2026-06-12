@@ -2,13 +2,16 @@ import { notFound } from "next/navigation";
 import { PageHero } from "@/components/shared/page-hero";
 import { SermonCard } from "@/components/content/sermon-card";
 import { Button } from "@/components/ui/button";
-import { getSermonsSync, getSermonBySlug, getRelatedSermons, formatDate } from "@/lib/content";
+import { getSermons, getSermonBySlug, getRelatedSermons, formatDate } from "@/lib/content";
 import { createPageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  return getSermonsSync().map((s) => ({ slug: s.slug }));
+  const sermons = await getSermons();
+  return sermons.map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
