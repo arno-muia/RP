@@ -11,20 +11,27 @@ Rebuilt from [rpacademy](https://github.com/ken-muritu/rpacademy) (legacy `rpweb
 | **Legacy lineage** | [github.com/ken-muritu/rpacademy](https://github.com/ken-muritu/rpacademy) |
 
 **Version:** `4.0.0` (root `package.json`)  
-**Current phase:** Phase 1 (Foundation) — public marketing site largely complete; member/ops portals and integrations are scaffolds.  
-**Last forensic update:** 2026-06-12 (commit `ec5fdec`)
+**Current phase:** Phase 1 (Foundation) — public marketing site largely complete; CMS admin delegated to RP OS ECC; member/ops portals are scaffolds.  
+**Production URL (canonical):** [rpchurch.vercel.app](https://rpchurch.vercel.app)  
+**Last forensic update:** 2026-06-12 (commit `ca6d8a1`) · **11 commits**  
+**Ecosystem:** [RP OS / ECC](https://github.com/ken-muritu/rpos) · [RP Academy](https://github.com/ken-muritu/rpacademy)
+
+**Status legend:** ✅ Complete · ⚠️ Partial/Needs Work · ❌ Missing · 🔴 Critical Issue · 🟡 Technical Debt · 🟢 Good/Compliant
 
 ---
 
 ## Table of Contents
 
-1. [Genesis & Evolution](#1-genesis--evolution)
-2. [Core Architecture](#2-core-architecture)
+1. [Genesis & Evolution](#1-genesis--evolution) `[UPDATED]`
+2. [Core Architecture](#2-core-architecture) `[UPDATED]`
 3. [Functional Deep-Dive](#3-functional-deep-dive)
-4. [Known Issues & Technical Debt](#4-known-issues--technical-debt)
-5. [Conception to Current State](#5-conception-to-current-state)
-6. [Development](#6-development)
-7. [Related Documentation](#7-related-documentation)
+4. [Feature Audit & Production Readiness Assessment](#4-feature-audit--production-readiness-assessment) `[NEW]`
+5. [Known Issues & Technical Debt](#5-known-issues--technical-debt) `[UPDATED]`
+6. [Missing Features — Global Standards Gap Analysis](#6-missing-features--global-standards-gap-analysis) `[NEW]`
+7. [Conception to Current State](#7-conception-to-current-state) `[UPDATED]`
+8. [Ecosystem Integration (RP OS ECC)](#8-ecosystem-integration-rp-os-ecc) `[NEW]`
+9. [Development](#9-development)
+10. [Related Documentation](#10-related-documentation)
 
 ---
 
@@ -93,6 +100,27 @@ The repository has **6 commits** (as of 2026-06-12). Every commit is documented 
 
 - **What:** Updated `content/site.json` `academyUrl` from `https://academy.royalpriesthood.church` to `https://rpacademy.vercel.app/`.
 - **Why:** Kingdom Formation LMS runs as a separate deployed app; church website links out rather than embedding LMS.
+
+#### Commit `3d1e84e` — 2026-06-12 — *Expand README into exhaustive forensic technical documentation*
+
+- **What:** First forensic README pass (35 models, feature inventory, security surface).
+- **Why:** Establish single source of truth before ecosystem integration.
+
+#### Commit `470afd3` — 2026-06-12 — *Serve public content DB-first with on-demand revalidation from RP OS*
+
+- **What:** `lib/content.ts` pivots to **DB-first** in production; JSON fallback only in non-production when Turso unreachable. Added `unstable_cache` with tags (`sermons`, `events`, `site-config`, etc.). New `POST /api/revalidate` endpoint for RP OS Embassy Command Center.
+- **Why:** Herald's Desk (RP OS) becomes CMS; public site must reflect Turso writes without full redeploy.
+- **Architectural decision:** Admin UI stays in RP OS (`/ops/heralds-desk`), not in rpwebsite `(ops)/` stubs.
+
+#### Commit `dd42d97` — 2026-06-12 — *Fix revalidate API for Next.js 16 required cache profile argument*
+
+- **What:** `revalidateTag(tag, { expire: 0 })` — Next.js 16 breaking change fix.
+- **Why:** ECC live sync test (`rpos` `npm run test:ecc-sync`) failed without explicit cache profile.
+
+#### Commits `040ec26` / `ca6d8a1` — 2026-06-12 — *Official RP logos and transparent favicons*
+
+- **What:** Brand assets aligned with RP OS and RP Academy.
+- **Why:** Ecosystem visual consistency across three Vercel deploys.
 
 ### 1.4 Technology stack decisions (current)
 
@@ -830,9 +858,121 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 
 ---
 
-## 4. Known Issues & Technical Debt
+## 4. Feature Audit & Production Readiness Assessment
 
-### 4.1 Critical
+`[NEW]` — Evaluated for global-scale production readiness (June 12, 2026).
+
+### 4.1 Security & Compliance
+
+| Control | Status | Detail |
+|---------|--------|--------|
+| Authentication backend | ⚠️ | NextAuth credentials + magic-link providers wired; **no login UI** |
+| Login lockout (5 fails → 15 min) | ✅ | Server-side in `lib/auth.ts` |
+| RBAC middleware | ✅ | Ops routes gated; member routes login-only |
+| MFA | ❌ | |
+| Rate limiting | ❌ | Contact/prayer APIs unprotected |
+| Encryption in transit | ✅ | HTTPS + HSTS (vercel.json) |
+| Encryption at rest | ⚠️ | Turso default (`aws-eu-west-1`) |
+| Input validation | ✅ | Zod on `/api/contact`, `/api/prayer` |
+| Audit logging | ⚠️ | Login only; no export logging |
+| Kenya DPA / ODPC | ❌ | `docs/COMPLIANCE.md` all unchecked |
+| Secrets in seed | 🔴 | `Admin@2026` in `prisma/seed.ts` |
+| Revalidate API auth | ✅ | `x-revalidate-secret` header required |
+| Dependency scanning | ❌ | |
+
+### 4.2 Reliability & Resilience
+
+| Control | Status |
+|---------|--------|
+| JSON fallback when DB down | ✅ Non-production only (`useJsonFallback()`) |
+| Error handling on APIs | ⚠️ Generic 500 messages |
+| Retry / circuit breaker | ❌ |
+| Health check endpoint | ❌ No `/api/health` — use homepage 200 |
+| Graceful degradation | ✅ Static JSON ensures build succeeds |
+
+### 4.3 Observability & Monitoring
+
+| Control | Status |
+|---------|--------|
+| Structured logging | ❌ |
+| Metrics / tracing | ❌ |
+| Alerting / SLOs | ❌ |
+| Sentry | ❌ |
+
+### 4.4 Performance & Scalability
+
+| Control | Status |
+|---------|--------|
+| ISR + cache tags | ✅ 60s TTL via `unstable_cache` |
+| On-demand revalidation | ✅ `/api/revalidate` from RP OS |
+| `dbAvailable()` per request | 🟡 Extra `SELECT 1` on uncached paths |
+| Load testing | **Data Unavailable** |
+| CDN | ⚠️ Vercel edge only |
+
+### 4.5 Data Management
+
+| Control | Status |
+|---------|--------|
+| Prisma migrations | ❌ `db:push` only |
+| Backup / DR | ❌ Not documented |
+| PII in ContactSubmission | ⚠️ Stored plaintext |
+| CMS source of truth | ✅ Turso in production; ECC writes via RP OS |
+
+### 4.6 API & Integration
+
+| Route | Status |
+|-------|--------|
+| `POST /api/contact` | ⚠️ Requires Turso on Vercel |
+| `POST /api/prayer` | ⚠️ Same |
+| `POST /api/revalidate` | ✅ ECC webhook from RP OS |
+| `GET/POST /api/auth/*` | ✅ Backend only |
+| OpenAPI docs | ❌ |
+| M-Pesa / Resend / Inngest | ❌ Planned |
+
+### 4.7 CI/CD & Deployment
+
+| Control | Status |
+|---------|--------|
+| GitHub Actions CI | ❌ |
+| Vercel auto-deploy | ✅ `main` → production |
+| Staging environment | ❌ |
+| Rollback | ⚠️ Manual via Vercel dashboard |
+
+### 4.8 Code Quality & Maintainability
+
+| Metric | Status |
+|--------|--------|
+| Test coverage | **0%** |
+| Lint / typecheck scripts | ✅ `npm run lint`, `type-check` |
+| Schema vs UI gap | 🔴 35 models, ~8 actively used |
+| Documentation | ✅ This README |
+
+### 4.9 Localization & Accessibility
+
+| Control | Status |
+|---------|--------|
+| i18n / Swahili | ❌ English only |
+| WCAG 2.1 AA audit | ❌ PRD planned |
+| Skip link | ✅ Root layout |
+| Mobile responsive | ✅ |
+| Cross-browser testing | **Data Unavailable** |
+
+### 4.10 User & Tenant Management
+
+| Control | Status |
+|---------|--------|
+| Multi-tenancy | ❌ Single church |
+| Member portal | ❌ Stub pages only |
+| CMS admin | ✅ Delegated to RP OS Herald's Desk |
+| SSO with RP OS / Academy | ❌ |
+
+---
+
+## 5. Known Issues & Technical Debt
+
+`[UPDATED]` — Section renumbered from 4.
+
+### 5.1 Critical
 
 | ID | Issue | Impact | Location |
 |----|-------|--------|----------|
@@ -841,7 +981,7 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 | C-3 | **Hardcoded seed password** | `Admin@2026` in seed script, logged to console | `prisma/seed.ts:46-64` |
 | C-4 | **Kenya DPA not complete** | Production member data migration blocked | `docs/COMPLIANCE.md` — all items unchecked |
 
-### 4.2 High
+### 5.2 High
 
 | ID | Issue | Impact | Location |
 |----|-------|--------|----------|
@@ -852,7 +992,7 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 | H-5 | **No Prisma migrations** | `db:push` only — risky for production schema changes | `docs/MIGRATION.md` |
 | H-6 | **35-model schema, ~5 models used** | Large schema surface with no UI — migration burden | `schema.prisma` |
 
-### 4.3 Medium
+### 5.3 Medium
 
 | ID | Issue | Impact | Location |
 |----|-------|--------|----------|
@@ -869,7 +1009,7 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 | M-11 | **Empty `packages/*` workspace** | Misleading monorepo structure | Root `package.json` |
 | M-12 | **Prisma prod logging** | Logs whether Turso env vars are SET (info leak) | `prisma.ts:30-32` |
 
-### 4.4 Low / cosmetic
+### 5.4 Low / cosmetic
 
 | ID | Issue | Impact | Location |
 |----|-------|--------|----------|
@@ -882,7 +1022,7 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 | L-7 | **ROADMAP says "28 models"** | Outdated count (actual: 35) | `docs/ROADMAP.md` |
 | L-8 | **Sign-out audit** | Only `console.log` — no AuditLog | `auth.ts:185-188` |
 
-### 4.5 Security surface summary
+### 5.5 Security surface summary
 
 | Control | Status |
 |---------|--------|
@@ -897,7 +1037,7 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 | Pastoral note encryption | **Not implemented** (recommended in COMPLIANCE.md) |
 | RBAC on member routes | **Not enforced** (login only) |
 
-### 4.6 Performance notes
+### 5.6 Performance notes
 
 | Area | Observation |
 |------|-------------|
@@ -908,9 +1048,32 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 
 ---
 
-## 5. Conception to Current State
+## 6. Missing Features — Global Standards Gap Analysis
 
-### 5.1 Narrative timeline
+`[NEW]`
+
+| Missing capability | Why needed | Approach | Complexity |
+|--------------------|------------|----------|------------|
+| Login UI | Auth backend unusable | Build `(public)/login/page.tsx` with `signIn()` | **Low** |
+| Member portal routes | Self-service reduces admin load | Implement `(member)/` pages against Prisma | **High** |
+| GitHub Actions CI | Regression safety | lint + typecheck + build on PR | **Medium** |
+| Rate limiting on public APIs | Spam/abuse | Upstash Ratelimit middleware | **Low** |
+| `/api/health` | Uptime monitoring | Mirror rpacademy pattern | **Low** |
+| Prisma migrations | Safe schema changes | `prisma migrate deploy` | **Medium** |
+| M-Pesa STK Push | Kenya giving | Daraja SDK on `/give` | **Medium** |
+| Kenya ODPC registration | Legal compliance | See COMPLIANCE.md | **Medium** |
+| SSO with RP OS | Single staff identity | Shared NextAuth secret or OIDC | **High** |
+| Automated tests | Quality gate | Playwright for public pages | **Medium** |
+| Sermon video embeds | UX | Per-sermon YouTube IDs in CMS | **Low** |
+| Ops module implementation | In-repo CRM | **Deferred** — use RP OS instead | **N/A** |
+
+---
+
+## 7. Conception to Current State
+
+`[UPDATED]`
+
+### 7.1 Narrative timeline
 
 **Before June 2026:** Royal Priesthood Embassy operated with a fragmented digital presence — legacy `rpweb` in the rpacademy monorepo, Netlify deploys, SQLite committed to git, and no formal path to Kenya DPA compliance for cloud database migration.
 
@@ -924,9 +1087,13 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 
 **2026-06-12 01:38 — Public launch:** Commit `7471631` ships the embassy website as `rpwebsite`. Burgundy/gold branding replaces cream Motivation palette — the site now reflects Royal Priesthood identity, not a template church. JSON content files mean the site builds and deploys even if Turso is down. ~50 ministry images migrate from rpacademy. The seed script bridges JSON → Turso for production CMS override.
 
-**2026-06-12 04:47 — Academy separation:** Commit `ec5fdec` acknowledges Kingdom Formation LMS as a separate product (`rpacademy.vercel.app`). The church site markets and links; it does not embed LMS functionality. This mirrors the three-pillar theology (Mantle/Rod/Sword) where formation happens in a dedicated environment.
+**2026-06-12 04:47 — Academy separation:** Commit `ec5fdec` acknowledges Kingdom Formation LMS as a separate product (`rpacademy.vercel.app`).
 
-### 5.2 Why specific code exists
+**2026-06-12 PM — ECC integration:** Commits `470afd3`–`dd42d97` make rpwebsite a **read-mostly public renderer** with Turso as CMS storage and RP OS Herald's Desk as the admin console. The `(ops)/` stubs in this repo are **superseded** by RP OS `/ops/heralds-desk`.
+
+**2026-06-12 PM — Brand parity:** Logo/favicon commits align with RP OS and Academy.
+
+### 7.2 Why specific code exists
 
 | Code | Why it exists |
 |------|---------------|
@@ -937,34 +1104,99 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 | `rbac.ts` path prefixes | Single source of truth for middleware + future layout guards |
 | `Household` model | Research correction #2 — families are operational units for giving, care, check-in |
 | `amountCents Int` | Research correction #4 — SQLite has no reliable Decimal |
-| Stub member/ops pages | Phase 1 Week 4 deliverables — prove route protection before building features |
+| `POST /api/revalidate` | ECC webhook — RP OS busts cache after Herald's Desk saves |
+| Stub member/ops pages | Superseded by RP OS; kept for route-group proof |
 | `vercel.json` headers | Security baseline before ops data exists |
 | `design-inspo/*.txt` | Human-readable pattern library for AI-assisted UI generation |
 
-### 5.3 Current state summary (2026-06-12)
+### 7.3 Current state summary (2026-06-12)
 
-| Layer | Completion estimate | Notes |
-|-------|---------------------|-------|
-| Public marketing | ~90% | All pages built; login stub; forms need prod DB |
-| Auth backend | ~70% | Providers + middleware done; UI + magic link route missing |
-| Member portal | ~5% | Layout + stub pages only |
-| Ministry ops | ~5% | Layout + stub pages only |
-| Integrations | 0% | M-Pesa, Inngest, Resend, Expo not started |
-| Compliance | ~10% | Privacy policy published; ODPC/DPA/SCCs not done |
-| Tests | 0% | No framework configured |
-
-**Production Vercel deploy status:** Data Unavailable for runtime error logs and Turso connectivity from this analysis environment.
+| Layer | Completion | Notes |
+|-------|------------|-------|
+| Public marketing | ~90% | All pages; DB-first + ECC revalidation |
+| CMS admin | ✅ **Delegated to RP OS** | Herald's Desk writes Turso + revalidates |
+| Auth backend | ~70% | No login UI |
+| Member portal | ~5% | Stubs only |
+| In-repo ministry ops | ~5% | **Use RP OS instead** |
+| Integrations | ⚠️ Revalidate only | M-Pesa, Inngest, Resend not started |
+| Compliance | ~10% | Privacy policy only |
+| Tests | 0% | |
 
 ---
 
-## 6. Development
+## 8. Ecosystem Integration (RP OS ECC)
 
-### 6.1 Prerequisites
+`[NEW]`
+
+### 8.1 Three-product topology
+
+| Product | Role | URL | Database |
+|---------|------|-----|----------|
+| **RP Website** (this) | Public marketing + forms | rpchurch.vercel.app | `rpwebsite` |
+| **RP OS** | CRM + Embassy Command Center | rpchurchos.vercel.app | `rpos` |
+| **RP Academy** | Kingdom Formation LMS | rpacademy.vercel.app | `rpacademy` |
+
+### 8.2 Herald's Desk → this site
+
+RP OS writes directly to **this repo's Turso database** (`rpwebsite`) for:
+
+- `PublicSermon`, `SermonSeries`, `ChurchEvent`
+- `WebsiteLeader`, `WebsiteTestimonial`
+- `SystemConfig` (welcome message, service times, hero image)
+
+After each write, RP OS calls:
+
+```http
+POST https://rpchurch.vercel.app/api/revalidate
+x-revalidate-secret: <REVALIDATE_SECRET>
+Content-Type: application/json
+
+{ "tags": ["sermons", "homepage"], "paths": ["/", "/sermons"] }
+```
+
+**Environment pairing:**
+
+| rpwebsite | RP OS |
+|-----------|-------|
+| `REVALIDATE_SECRET` | `WEBSITE_REVALIDATE_SECRET` (same value) |
+| — | `WEBSITE_REVALIDATE_URL=https://rpchurch.vercel.app/api/revalidate` |
+| `TURSO_*` | `TURSO_WEBSITE_*` (same DB, different token names) |
+
+### 8.3 Cache tags (must match RP OS `lib/ecc-revalidate.ts`)
+
+| Tag | Invalidated content |
+|-----|---------------------|
+| `sermons` | Sermon list + detail |
+| `events` | Event list + detail |
+| `leadership` | About page leaders |
+| `testimonials` | Homepage testimonials |
+| `site-config` | Service times, welcome message |
+| `homepage` | `/` aggregate |
+
+### 8.4 Verification
+
+From RP OS repo: `npm run test:ecc-sync` — patches Turso rows, revalidates, confirms marker appears on live HTML, restores originals.
+
+### 8.5 What stays in this repo vs RP OS
+
+| Concern | Owner |
+|---------|-------|
+| Public page rendering | **rpwebsite** |
+| Contact/prayer form submission | **rpwebsite** (`/api/contact`, `/api/prayer`) |
+| CMS CRUD UI | **RP OS** Herald's Desk |
+| Member CRM, attendance, giving | **RP OS** |
+| LMS content admin | **RP OS** Scribe's Chamber → `rpacademy` DB |
+
+---
+
+## 9. Development
+
+### 9.1 Prerequisites
 
 - Node.js >= 20
 - npm (workspaces)
 
-### 6.2 Setup
+### 9.2 Setup
 
 ```bash
 cp apps/web/.env.example apps/web/.env
@@ -974,7 +1206,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-### 6.3 Database (local)
+### 9.3 Database (local)
 
 ```bash
 cd apps/web
@@ -982,7 +1214,7 @@ npm run db:push      # SQLite schema at prisma/dev.db
 npm run db:seed      # Seed from content JSON + admin user
 ```
 
-### 6.4 Database (Turso production)
+### 9.4 Database (Turso production)
 
 ```bash
 cd apps/web
@@ -990,7 +1222,7 @@ cd apps/web
 npm run db:setup     # db:push:turso && db:seed
 ```
 
-### 6.5 Scripts (from repo root)
+### 9.5 Scripts (from repo root)
 
 ```bash
 npm run dev          # Start dev server
@@ -1001,14 +1233,16 @@ npm run type-check   # tsc --noEmit
 
 ---
 
-## 7. Related Documentation
+## 10. Related Documentation
 
 | Document | Purpose |
 |----------|---------|
-| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Stack, data flow, mobile strategy, five corrections |
-| [docs/ROADMAP.md](./docs/ROADMAP.md) | 20-week / 740-hour implementation plan |
+| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Stack, data flow, mobile strategy |
+| [docs/ROADMAP.md](./docs/ROADMAP.md) | 20-week / 740-hour plan |
 | [docs/MIGRATION.md](./docs/MIGRATION.md) | v3 → v4 port checklist |
-| [docs/COMPLIANCE.md](./docs/COMPLIANCE.md) | Kenya DPA 2019 compliance checklist |
+| [docs/COMPLIANCE.md](./docs/COMPLIANCE.md) | Kenya DPA checklist |
+| [rpos/README.md](https://github.com/ken-muritu/rpos) | RP OS + ECC forensic reference |
+| [rpacademy/README.md](https://github.com/ken-muritu/rpacademy) | Academy + mobile forensic reference |
 
 ---
 
@@ -1022,4 +1256,4 @@ npm run type-check   # tsc --noEmit
 
 ---
 
-*This README is a living forensic document. Update it when commits change architecture, features, or known issues.*
+*This README is the living forensic Single Source of Truth for rpwebsite. Sections marked `[NEW]` or `[UPDATED]` reflect the June 12, 2026 ecosystem audit (ECC integration + production readiness).*
