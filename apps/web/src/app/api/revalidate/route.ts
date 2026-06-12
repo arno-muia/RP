@@ -25,7 +25,8 @@ export async function POST(request: NextRequest) {
   const paths = body.paths ?? ["/"];
 
   for (const tag of tags) {
-    revalidateTag(tag);
+    // Immediate expiry for webhook-style invalidation from RP OS ECC.
+    revalidateTag(tag, { expire: 0 });
   }
   for (const path of paths) {
     revalidatePath(path);
