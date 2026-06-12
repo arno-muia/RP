@@ -1127,3 +1127,19 @@ model PrayerSubmission {
 
   @@index([createdAt])
 }
+
+model VisitRsvp {
+  id         String    @id @default(uuid())
+  name       String
+  phone      String
+  email      String?
+  partySize  Int       @default(1)
+  firstVisit Boolean   @default(true)
+  visitDate  DateTime?
+  notes      String?
+  status     String    @default("PENDING")
+  createdAt  DateTime  @default(now())
+
+  @@index([createdAt])
+  @@index([status])
+}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { formShellClass, inputClass, labelClass, textareaClass } from "@/lib/form-classes";
+import { Button } from "@/components/ui/button";
 
 export function PrayerForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -28,24 +30,50 @@ export function PrayerForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 rounded-xl border border-burgundy/10 bg-cream p-8">
+    <form onSubmit={handleSubmit} className={formShellClass}>
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-charcoal">Name (optional for anonymous)</label>
-        <input id="name" name="name" type="text" disabled={anonymous} className="mt-1 w-full rounded-lg border border-burgundy/20 bg-white px-4 py-3 text-sm focus:border-burgundy focus:outline-none disabled:opacity-50" />
+        <label htmlFor="name" className={labelClass}>
+          Name (optional for anonymous)
+        </label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          disabled={anonymous}
+          className={inputClass}
+        />
       </div>
       <div>
-        <label htmlFor="request" className="block text-sm font-medium text-charcoal">Prayer Request</label>
-        <textarea id="request" name="request" rows={6} required placeholder="Share what you'd like us to pray for..." className="mt-1 w-full rounded-lg border border-burgundy/20 bg-white px-4 py-3 text-sm focus:border-burgundy focus:outline-none" />
+        <label htmlFor="request" className={labelClass}>Prayer Request</label>
+        <textarea
+          id="request"
+          name="request"
+          rows={6}
+          required
+          placeholder="Share what you'd like us to pray for..."
+          className={textareaClass}
+        />
       </div>
       <label className="flex items-start gap-3">
-        <input type="checkbox" checked={anonymous} onChange={(e) => setAnonymous(e.target.checked)} className="mt-1 rounded border-burgundy/20" />
-        <span className="text-sm text-muted">Submit anonymously</span>
+        <input
+          type="checkbox"
+          checked={anonymous}
+          onChange={(e) => setAnonymous(e.target.checked)}
+          className="mt-1 rounded border-border text-primary focus:ring-primary"
+        />
+        <span className="text-sm text-muted-foreground">Submit anonymously</span>
       </label>
-      <button type="submit" disabled={status === "loading"} className="w-full rounded-full bg-burgundy px-6 py-3 text-sm font-semibold text-white hover:bg-burgundy-light disabled:opacity-50">
-        {status === "loading" ? "Submitting..." : "Submit Prayer Request"}
-      </button>
-      {status === "success" && <p className="text-sm text-green-700">Prayer request received. Our team is praying with you.</p>}
-      {status === "error" && <p className="text-sm text-red-600">Something went wrong. Please try again.</p>}
+      <Button type="submit" variant="primary" disabled={status === "loading"} className="w-full">
+        {status === "loading" ? "Submitting…" : "Submit Prayer Request"}
+      </Button>
+      {status === "success" && (
+        <p className="text-sm text-rp-success">
+          Prayer request received. Our team is praying with you.
+        </p>
+      )}
+      {status === "error" && (
+        <p className="text-sm text-rp-danger">Something went wrong. Please try again.</p>
+      )}
     </form>
   );
 }

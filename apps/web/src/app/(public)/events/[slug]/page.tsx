@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { PageHero } from "@/components/shared/page-hero";
 import { Button } from "@/components/ui/button";
+import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { getEvents, getEventBySlug, formatEventDate } from "@/lib/content";
 import { createPageMetadata } from "@/lib/seo";
 import Image from "next/image";
@@ -38,39 +39,51 @@ export default async function EventDetailPage({ params }: Props) {
         register="warm"
       />
 
-      <section className="section-padding register-celestial bg-white">
+      <section className="register-celestial section-padding">
         <div className="mx-auto max-w-4xl px-5 md:px-8">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-xl">
-            <Image
-              src={event.image}
-              alt={event.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 896px) 100vw, 896px"
-            />
-          </div>
-          <div className="mt-8 space-y-4">
-            <p className="text-lg leading-relaxed text-charcoal">{event.description}</p>
-            <div className="rounded-xl border border-burgundy/10 bg-cream p-6">
-              <dl className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <dt className="text-xs font-semibold uppercase tracking-wider text-gold">Date</dt>
-                  <dd className="mt-1 font-medium text-burgundy">{formatEventDate(event.date)}</dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-semibold uppercase tracking-wider text-gold">Time</dt>
-                  <dd className="mt-1 font-medium text-burgundy">{event.time}</dd>
-                </div>
-                <div className="sm:col-span-2">
-                  <dt className="text-xs font-semibold uppercase tracking-wider text-gold">Location</dt>
-                  <dd className="mt-1 font-medium text-burgundy">{event.location}</dd>
-                </div>
-              </dl>
+          <ScrollReveal>
+            <div className="relative aspect-[16/9] overflow-hidden rounded-xl border border-border">
+              <Image
+                src={event.image}
+                alt={event.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 896px) 100vw, 896px"
+              />
             </div>
-            <Button href="/visit" variant="primary">
-              Plan Your Visit
-            </Button>
-          </div>
+            <div className="mt-8 space-y-4">
+              <p className="text-lg leading-relaxed text-muted-foreground">
+                {event.description}
+              </p>
+              <div className="glass-frost rounded-xl p-6">
+                <dl className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <dt className="text-xs font-semibold uppercase tracking-wider text-primary">
+                      Date
+                    </dt>
+                    <dd className="mt-1 font-medium text-foreground">
+                      {formatEventDate(event.date)}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-semibold uppercase tracking-wider text-primary">
+                      Time
+                    </dt>
+                    <dd className="mt-1 font-medium text-foreground">{event.time}</dd>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <dt className="text-xs font-semibold uppercase tracking-wider text-primary">
+                      Location
+                    </dt>
+                    <dd className="mt-1 font-medium text-foreground">{event.location}</dd>
+                  </div>
+                </dl>
+              </div>
+              <Button href="/visit#rsvp" variant="primary">
+                Plan Your Visit
+              </Button>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
     </>

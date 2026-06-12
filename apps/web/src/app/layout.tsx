@@ -1,24 +1,29 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Dancing_Script, Montserrat } from "next/font/google";
+import { Cinzel, Inter, JetBrains_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { AuthSessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 import { site } from "@/lib/site";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const cinzel = Cinzel({
+  variable: "--font-cinzel",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "900"],
+  weight: ["400", "600", "700"],
+  display: "swap",
 });
 
-const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
-const dancingScript = Dancing_Script({
-  variable: "--font-dancing",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains",
   subsets: ["latin"],
-  weight: "700",
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -38,7 +43,7 @@ export const metadata: Metadata = {
     title: site.name,
     description: site.description,
     type: "website",
-    url: "https://rpwebsite.vercel.app",
+    url: "https://rpchurch.vercel.app",
     siteName: site.name,
   },
   icons: {
@@ -51,6 +56,8 @@ export const metadata: Metadata = {
   },
 };
 
+const themeScript = `(function(){try{var t=localStorage.getItem('rp-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}else if(t==='system'){document.documentElement.setAttribute('data-theme',window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');}else{document.documentElement.setAttribute('data-theme','light');}}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -59,16 +66,25 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} ${bebasNeue.variable} ${dancingScript.variable} h-full antialiased`}
+      data-theme="light"
+      suppressHydrationWarning
+      className={`${cinzel.variable} ${inter.variable} ${jetbrainsMono.variable} h-full`}
     >
-      <body className="min-h-full bg-cream font-sans text-charcoal">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-burgundy focus:px-4 focus:py-2 focus:text-white"
-        >
-          Skip to content
-        </a>
-        {children}
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className="min-h-full font-sans">
+        <ThemeProvider>
+          <AuthSessionProvider>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-white"
+            >
+              Skip to content
+            </a>
+            {children}
+          </AuthSessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -20,17 +20,17 @@ export function EventCard({ event }: EventCardProps) {
             sizes="(max-width: 768px) 100vw, 33vw"
           />
           {event.status === "ongoing" && (
-            <span className="absolute left-3 top-3 rounded-full bg-gold px-3 py-1 text-xs font-semibold text-white">
+            <span className="absolute left-3 top-3 rounded-full bg-fire-500 px-3 py-1 text-xs font-semibold text-white">
               Ongoing
             </span>
           )}
         </div>
         <div className="mt-5 space-y-2">
-          <p className="text-sm text-muted">{formatEventDate(event.date)}</p>
-          <h3 className="font-display text-2xl uppercase tracking-wide text-burgundy">
+          <p className="text-sm text-muted-foreground">{formatEventDate(event.date)}</p>
+          <h3 className="font-display text-xl text-foreground group-hover:text-primary">
             {event.title}
           </h3>
-          <p className="text-sm text-muted">{event.location}</p>
+          <p className="text-sm text-muted-foreground">{event.location}</p>
         </div>
       </Link>
     </article>

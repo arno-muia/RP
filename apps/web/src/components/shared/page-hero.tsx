@@ -27,24 +27,26 @@ export function PageHero({
       className={cn(
         registerClass,
         "relative overflow-hidden section-padding",
-        register === "warm" && "bg-burgundy text-white",
-        register === "parchment" && "bg-cream",
-        register === "celestial" && "bg-white",
         className,
       )}
     >
+      {register === "warm" && (
+        <div className="absolute inset-0 bg-gradient-to-b from-obsidian-800/50 to-obsidian-900" />
+      )}
       <div className="relative mx-auto max-w-7xl px-5 text-center md:px-8">
         {scripture && (
-          <p className="font-accent mb-4 text-xl text-gold md:text-2xl">{scripture}</p>
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-400">
+            {scripture}
+          </p>
         )}
-        <h1 className="font-display text-5xl uppercase tracking-wide md:text-7xl">
+        <h1 className="font-display text-4xl tracking-tight md:text-5xl lg:text-6xl">
           {title}
         </h1>
         {subtitle && (
           <p
             className={cn(
               "mx-auto mt-6 max-w-2xl text-lg",
-              register === "warm" ? "text-white/80" : "text-muted",
+              register === "warm" ? "text-ivory-200" : "text-muted-foreground",
             )}
           >
             {subtitle}

@@ -44,7 +44,7 @@
     {
       "name": "Sunday Main Service",
       "day": "Sunday",
-      "time": "9:00 AM",
+      "time": "9:00 AM – 12:00 PM",
       "platform": "physical",
       "location": "Voice of Grace, Behind Spoonzoom, Thika",
       "description": "Our primary worship gathering — worship, teaching, and ministry time in the sanctuary.",
@@ -63,11 +63,20 @@
     {
       "name": "Youth Service",
       "day": "Sunday",
-      "time": "11:30 AM",
+      "time": "11:30 AM – 1:00 PM",
       "platform": "physical",
       "location": "Youth Auditorium, Thika",
       "description": "Dynamic service for young people with worship, teaching, and community.",
       "image": "/images/services/kingdom-formation-4.jpg"
+    },
+    {
+      "name": "Thursday Intercession",
+      "day": "Thursday",
+      "time": "TBD",
+      "platform": "physical",
+      "location": "Voice of Grace, Behind Spoonzoom, Thika",
+      "description": "Corporate prayer and intercession for the nation, church, and families.",
+      "image": "/images/services/kingdom-formation-3.jpg"
     }
   ],
   "whatToExpect": [

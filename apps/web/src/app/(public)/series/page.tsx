@@ -1,6 +1,6 @@
 import { PageHero } from "@/components/shared/page-hero";
-import { SermonCard } from "@/components/content/sermon-card";
-import { getSeries, getSermonsBySeries } from "@/lib/content";
+import { ScrollReveal } from "@/components/motion/scroll-reveal";
+import { getSeries } from "@/lib/content";
 import { createPageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
@@ -21,25 +21,23 @@ export default async function SeriesPage() {
         register="parchment"
       />
 
-      <section className="section-padding register-celestial bg-white">
+      <section className="register-celestial section-padding">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <ScrollReveal stagger={0.08} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {series.map((s) => (
               <Link
                 key={s.slug}
                 href={`/series/${s.slug}`}
-                className="card-hover block rounded-xl border border-burgundy/10 p-6"
+                className="card-hover glass-frost block rounded-xl p-6"
               >
-                <h3 className="font-display text-2xl uppercase tracking-wide text-burgundy">
-                  {s.title}
-                </h3>
-                <p className="mt-2 text-sm text-muted">{s.description}</p>
-                <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-gold">
+                <h3 className="font-display text-xl text-foreground">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.description}</p>
+                <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-primary">
                   {s.sermonCount} sermons
                 </p>
               </Link>
             ))}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
     </>

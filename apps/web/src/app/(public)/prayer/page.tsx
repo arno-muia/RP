@@ -1,5 +1,6 @@
 import { PageHero } from "@/components/shared/page-hero";
 import { PrayerForm } from "@/components/forms/prayer-form";
+import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
@@ -17,10 +18,10 @@ export default function PrayerPage() {
         register="warm"
         scripture="James 5:16"
       />
-      <section className="section-padding register-celestial bg-white">
-        <div className="mx-auto max-w-2xl px-5 md:px-8">
+      <section className="register-celestial section-padding">
+        <ScrollReveal className="mx-auto max-w-2xl px-5 md:px-8">
           <PrayerForm />
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

@@ -1,4 +1,5 @@
 import { PageHero } from "@/components/shared/page-hero";
+import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { Button } from "@/components/ui/button";
 import { getBeliefs, getLeadership, getValues, getSiteConfig } from "@/lib/content";
 import { images } from "@/lib/images";
@@ -8,7 +9,8 @@ import Image from "next/image";
 
 export const metadata = createPageMetadata({
   title: "About",
-  description: "Learn about Royal Priesthood Embassy — our story, beliefs, values, and leadership team in Thika, Kenya.",
+  description:
+    "Learn about Royal Priesthood Embassy — our story, beliefs, values, and leadership team in Thika, Kenya.",
   path: "/about",
 });
 
@@ -38,12 +40,10 @@ export default async function AboutPage() {
         scripture={site.scripture}
       />
 
-      <section className="section-padding register-parchment">
-        <div className="mx-auto max-w-4xl px-5 md:px-8">
-          <h2 className="font-display text-3xl uppercase tracking-wide text-burgundy md:text-4xl">
-            Our Story
-          </h2>
-          <div className="mt-6 space-y-4 text-lg leading-relaxed text-charcoal">
+      <section className="register-parchment section-padding">
+        <ScrollReveal className="mx-auto max-w-4xl px-5 md:px-8">
+          <h2 className="font-display text-3xl text-foreground md:text-4xl">Our Story</h2>
+          <div className="mt-6 space-y-4 text-lg leading-relaxed text-foreground">
             <p>
               Royal Priesthood Embassy was founded with a vision to raise a generation deeply
               rooted in the Word of God and fully committed to following Christ alone. What
@@ -58,62 +58,61 @@ export default async function AboutPage() {
             </p>
             <p>{site.description}</p>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      <section id="beliefs" className="section-padding register-celestial bg-white">
+      <section id="beliefs" className="register-celestial section-padding">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <h2 className="font-display text-center text-3xl uppercase tracking-wide text-burgundy md:text-4xl">
-            Statement of Faith
-          </h2>
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <ScrollReveal className="text-center">
+            <h2 className="font-display text-3xl text-foreground md:text-4xl">
+              Statement of Faith
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal stagger={0.08} className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {beliefs.map((belief) => (
-              <article
-                key={belief.id}
-                className="rounded-xl border border-burgundy/10 p-6"
-              >
-                <h3 className="text-lg font-bold text-burgundy">{belief.title}</h3>
-                <p className="mt-2 text-sm text-muted">{belief.description}</p>
+              <article key={belief.id} className="glass-frost rounded-xl p-6">
+                <h3 className="font-display text-lg text-primary">{belief.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{belief.description}</p>
               </article>
             ))}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      <section className="section-padding register-parchment">
+      <section className="register-parchment section-padding">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <h2 className="font-display text-center text-3xl uppercase tracking-wide text-burgundy md:text-4xl">
-            Our Values
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-center text-muted">
-            The Mantle, Rod, and Sword — Identity, Authority, and Execution
-          </p>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
+          <ScrollReveal className="text-center">
+            <h2 className="font-display text-3xl text-foreground md:text-4xl">Our Values</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+              The Mantle, Rod, and Sword — Identity, Authority, and Execution
+            </p>
+          </ScrollReveal>
+          <ScrollReveal stagger={0.1} className="mt-12 grid gap-8 md:grid-cols-3">
             {values.map((value) => (
               <article
                 key={value.id}
-                className="card-hover rounded-xl border border-burgundy/10 bg-white p-8 text-center"
+                className="card-hover glass-frost rounded-xl p-8 text-center"
               >
-                <h3 className="font-display text-2xl uppercase tracking-wide text-burgundy">
-                  {value.title}
-                </h3>
-                <p className="mt-4 text-sm text-muted">{value.description}</p>
+                <h3 className="font-display text-xl text-primary">{value.title}</h3>
+                <p className="mt-4 text-sm text-muted-foreground">{value.description}</p>
               </article>
             ))}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      <section id="leadership" className="section-padding register-celestial bg-white">
+      <section id="leadership" className="register-celestial section-padding">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <h2 className="font-display text-center text-3xl uppercase tracking-wide text-burgundy md:text-4xl">
-            Leadership Team
-          </h2>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <ScrollReveal className="text-center">
+            <h2 className="font-display text-3xl text-foreground md:text-4xl">
+              Leadership Team
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal stagger={0.08} className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {leaders.map((leader) => (
               <article key={leader.id} className="text-center">
                 {leader.photo ? (
-                  <div className="relative mx-auto h-48 w-48 overflow-hidden rounded-full">
+                  <div className="relative mx-auto h-48 w-48 overflow-hidden rounded-full border-2 border-primary/20">
                     <Image
                       src={leader.photo}
                       alt={leader.name}
@@ -123,18 +122,18 @@ export default async function AboutPage() {
                     />
                   </div>
                 ) : (
-                  <div className="mx-auto flex h-48 w-48 items-center justify-center rounded-full bg-burgundy/10">
-                    <span className="font-display text-4xl text-burgundy">
+                  <div className="mx-auto flex h-48 w-48 items-center justify-center rounded-full bg-primary/10">
+                    <span className="font-display text-4xl text-primary">
                       {leaderInitials(leader.name)}
                     </span>
                   </div>
                 )}
-                <h3 className="mt-4 font-bold text-burgundy">{leader.name}</h3>
-                <p className="text-sm font-medium text-gold">{leader.role}</p>
-                <p className="mt-2 text-sm text-muted">{leader.bio}</p>
+                <h3 className="mt-4 font-semibold text-foreground">{leader.name}</h3>
+                <p className="text-sm font-medium text-primary">{leader.role}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{leader.bio}</p>
               </article>
             ))}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -146,20 +145,20 @@ export default async function AboutPage() {
           className="object-cover opacity-30"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-burgundy/80" />
-        <div className="relative mx-auto max-w-4xl px-5 text-center md:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+        <div className="absolute inset-0 bg-gradient-to-b from-obsidian-900/80 to-obsidian-950/90" />
+        <ScrollReveal className="relative mx-auto max-w-4xl px-5 text-center md:px-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-300">
             2026 Theme
           </p>
-          <h2 className="font-display mt-2 text-4xl uppercase tracking-wide text-white md:text-5xl">
+          <h2 className="font-display mt-2 text-4xl text-ivory-25 md:text-5xl">
             {site.theme2026.title}
           </h2>
-          <p className="font-accent mt-4 text-2xl text-gold">{site.theme2026.scripture}</p>
-          <p className="mt-6 text-lg text-white/85">{site.theme2026.scriptureText}</p>
+          <p className="mt-4 text-xl text-gold-300">{site.theme2026.scripture}</p>
+          <p className="mt-6 text-lg text-ivory-200/90">{site.theme2026.scriptureText}</p>
           <div className="mt-8">
             <Button href="/visit" variant="gold">Join Us</Button>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

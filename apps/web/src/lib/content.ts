@@ -117,11 +117,6 @@ async function dbAvailable(): Promise<boolean> {
   }
 }
 
-/** DB-first: use JSON only when Turso is unreachable (local dev). */
-function useJsonFallback(): boolean {
-  return process.env.NODE_ENV !== "production";
-}
-
 const CACHE_TTL = 60;
 
 export async function getSiteConfig(): Promise<SiteData> {
@@ -222,18 +217,22 @@ export async function getWelcomeMessage() {
   })();
 }
 
+/** DB-first; JSON when DB unreachable or empty (deployment resilience). */
+function jsonSermons(): Sermon[] {
+  return (sermonsData as Sermon[])
+    .filter((s) => s.published)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
 async function fetchSermons(): Promise<Sermon[]> {
   if (await dbAvailable()) {
     const rows = await getPrisma().publicSermon.findMany({
       where: { isPublished: true },
       orderBy: { date: "desc" },
     });
-    return rows.map(mapDbSermon);
+    if (rows.length > 0) return rows.map(mapDbSermon);
   }
-  if (!useJsonFallback()) return [];
-  return (sermonsData as Sermon[])
-    .filter((s) => s.published)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return jsonSermons();
 }
 
 export async function getSermons(): Promise<Sermon[]> {
@@ -299,9 +298,8 @@ async function fetchEvents(): Promise<Event[]> {
       where: { status: { in: ["PUBLISHED", "COMPLETED"] } },
       orderBy: { startDateTime: "desc" },
     });
-    return rows.map(mapDbEvent);
+    if (rows.length > 0) return rows.map(mapDbEvent);
   }
-  if (!useJsonFallback()) return [];
   return (eventsData as Event[]).filter((e) => e.published);
 }
 
@@ -331,17 +329,18 @@ async function fetchLeadership(): Promise<Leader[]> {
       where: { isPublished: true },
       orderBy: { sortOrder: "asc" },
     });
-    return rows.map((r) => ({
-      id: r.id,
-      name: r.name,
-      role: r.role,
-      bio: r.bio,
-      photo: r.photoUrl ? r.photoUrl : undefined,
-      order: r.sortOrder,
-      social: r.social as Leader["social"],
-    }));
+    if (rows.length > 0) {
+      return rows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        role: r.role,
+        bio: r.bio,
+        photo: r.photoUrl ? r.photoUrl : undefined,
+        order: r.sortOrder,
+        social: r.social as Leader["social"],
+      }));
+    }
   }
-  if (!useJsonFallback()) return [];
   return (leadershipData as Leader[]).sort((a, b) => a.order - b.order);
 }
 
@@ -358,15 +357,16 @@ async function fetchTestimonials(): Promise<Testimonial[]> {
       where: { isPublished: true },
       orderBy: { sortOrder: "asc" },
     });
-    return rows.map((r) => ({
-      id: r.id,
-      quote: r.quote,
-      name: r.name,
-      role: r.role ?? undefined,
-      photo: r.photoUrl ?? undefined,
-    }));
+    if (rows.length > 0) {
+      return rows.map((r) => ({
+        id: r.id,
+        quote: r.quote,
+        name: r.name,
+        role: r.role ?? undefined,
+        photo: r.photoUrl ?? undefined,
+      }));
+    }
   }
-  if (!useJsonFallback()) return [];
   return testimonialsData as Testimonial[];
 }
 

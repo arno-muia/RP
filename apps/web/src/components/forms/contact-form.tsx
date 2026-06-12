@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { formShellClass, inputClass, labelClass, textareaClass } from "@/lib/form-classes";
+import { Button } from "@/components/ui/button";
 
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -26,29 +28,33 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 rounded-xl border border-burgundy/10 bg-cream p-8">
-      <h2 className="font-display text-2xl uppercase tracking-wide text-burgundy">Send a Message</h2>
+    <form onSubmit={handleSubmit} className={formShellClass}>
+      <h2 className="font-display text-2xl text-foreground">Send a Message</h2>
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-charcoal">Name</label>
-        <input id="name" name="name" type="text" required className="mt-1 w-full rounded-lg border border-burgundy/20 bg-white px-4 py-3 text-sm focus:border-burgundy focus:outline-none" />
+        <label htmlFor="name" className={labelClass}>Name</label>
+        <input id="name" name="name" type="text" required className={inputClass} />
       </div>
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-charcoal">Email</label>
-        <input id="email" name="email" type="email" required className="mt-1 w-full rounded-lg border border-burgundy/20 bg-white px-4 py-3 text-sm focus:border-burgundy focus:outline-none" />
+        <label htmlFor="email" className={labelClass}>Email</label>
+        <input id="email" name="email" type="email" required className={inputClass} />
       </div>
       <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-charcoal">Phone (optional)</label>
-        <input id="phone" name="phone" type="tel" className="mt-1 w-full rounded-lg border border-burgundy/20 bg-white px-4 py-3 text-sm focus:border-burgundy focus:outline-none" />
+        <label htmlFor="phone" className={labelClass}>Phone (optional)</label>
+        <input id="phone" name="phone" type="tel" className={inputClass} />
       </div>
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-charcoal">Message</label>
-        <textarea id="message" name="message" rows={4} required className="mt-1 w-full rounded-lg border border-burgundy/20 bg-white px-4 py-3 text-sm focus:border-burgundy focus:outline-none" />
+        <label htmlFor="message" className={labelClass}>Message</label>
+        <textarea id="message" name="message" rows={4} required className={textareaClass} />
       </div>
-      <button type="submit" disabled={status === "loading"} className="w-full rounded-full bg-burgundy px-6 py-3 text-sm font-semibold text-white hover:bg-burgundy-light disabled:opacity-50">
-        {status === "loading" ? "Sending..." : "Send Message"}
-      </button>
-      {status === "success" && <p className="text-sm text-green-700">Message sent! We&apos;ll be in touch soon.</p>}
-      {status === "error" && <p className="text-sm text-red-600">Something went wrong. Please email us directly.</p>}
+      <Button type="submit" variant="primary" disabled={status === "loading"} className="w-full">
+        {status === "loading" ? "Sending…" : "Send Message"}
+      </Button>
+      {status === "success" && (
+        <p className="text-sm text-rp-success">Message sent! We&apos;ll be in touch soon.</p>
+      )}
+      {status === "error" && (
+        <p className="text-sm text-rp-danger">Something went wrong. Please email us directly.</p>
+      )}
     </form>
   );
 }
