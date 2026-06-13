@@ -1,20 +1,20 @@
 # Royal Priesthood OS v4 — Technical README
 
 **Ministry operating system for Royal Priesthood Embassy (Thika, Kenya).**  
-Rebuilt from [rpacademy](https://github.com/ken-muritu/rpacademy) (legacy `rpweb` v3) with a research-validated architecture (May 2026 deep research report).
+Rebuilt from [rpacademy](https://github.com/RoyalPriesthoodTech/rpacademy) (legacy `rpweb` v3) with a research-validated architecture (May 2026 deep research report).
 
 | Resource | URL |
 |----------|-----|
 | **Public website (live)** | [rpwebsite.vercel.app](https://rpwebsite.vercel.app) |
 | **Kingdom Formation Academy** | [rpacademy.vercel.app](https://rpacademy.vercel.app/) |
-| **Repository** | [github.com/ken-muritu/rpwebsite](https://github.com/ken-muritu/rpwebsite) |
-| **Legacy lineage** | [github.com/ken-muritu/rpacademy](https://github.com/ken-muritu/rpacademy) |
+| **Repository** | [github.com/ken-muritu/rpwebsite](https://github.com/RoyalPriesthoodTech/rpwebsite) |
+| **Legacy lineage** | [github.com/ken-muritu/rpacademy](https://github.com/RoyalPriesthoodTech/rpacademy) |
 
 **Version:** `4.0.0` (root `package.json`)  
 **Current phase:** Phase 1 (Foundation) — public marketing site largely complete; CMS admin delegated to RP OS ECC; member/ops portals are scaffolds.  
 **Production URL (canonical):** [rpchurch.vercel.app](https://rpchurch.vercel.app)  
 **Last forensic update:** 2026-06-12 (commit `8623cb3`) · **13 commits**  
-**Ecosystem:** [RP OS / ECC](https://github.com/ken-muritu/rpos) · [RP Academy](https://github.com/ken-muritu/rpacademy)
+**Ecosystem:** [RP OS / ECC](https://github.com/RoyalPriesthoodTech/rpos) · [RP Academy](https://github.com/RoyalPriesthoodTech/rpacademy)
 
 **Status legend:** ✅ Complete · ⚠️ Partial/Needs Work · ❌ Missing · 🔴 Critical Issue · 🟡 Technical Debt · 🟢 Good/Compliant
 
@@ -809,7 +809,7 @@ export async function POST(request: Request) {
 | JWT role injection | **Working** | `role`, `memberId`, `mustChangePassword` in session |
 | Password change redirect | **Not Working** | `/change-password` page missing |
 | Audit log on login | **Working** (server) | `AuditLog` CREATE on signIn event |
-| Seed admin user | **Working** (script) | `admin@royalpriesthood.church` / `Admin@2026` |
+| Seed admin user | **Working** (script) | `admin@royalpriesthood.church` / `(local — set via SEED_ADMIN_PASSWORD)` |
 
 ---
 
@@ -876,7 +876,7 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 | Input validation | ✅ | Zod on `/api/contact`, `/api/prayer` |
 | Audit logging | ⚠️ | Login only; no export logging |
 | Kenya DPA / ODPC | ❌ | `docs/COMPLIANCE.md` all unchecked |
-| Secrets in seed | 🔴 | `Admin@2026` in `prisma/seed.ts` |
+| Secrets in seed | 🔴 | `(local — set via SEED_ADMIN_PASSWORD)` in `prisma/seed.ts` |
 | Revalidate API auth | ✅ | `x-revalidate-secret` header required |
 | Dependency scanning | ❌ | |
 
@@ -978,7 +978,7 @@ Canonical paths centralized in `lib/images.ts`. Source lineage: `github.com/ken-
 |----|-------|--------|----------|
 | C-1 | **No login UI** | Auth backend complete but users cannot sign in | `(public)/login/page.tsx` |
 | C-2 | **Production DB dependency** | Contact/prayer forms return 500 without Turso on Vercel | `api/contact`, `api/prayer`, `prisma.ts` |
-| C-3 | **Hardcoded seed password** | `Admin@2026` in seed script, logged to console | `prisma/seed.ts:46-64` |
+| C-3 | **Hardcoded seed password** | `(local — set via SEED_ADMIN_PASSWORD)` in seed script, logged to console | `prisma/seed.ts:46-64` |
 | C-4 | **Kenya DPA not complete** | Production member data migration blocked | `docs/COMPLIANCE.md` — all items unchecked |
 
 ### 5.2 High
@@ -1241,8 +1241,8 @@ npm run type-check   # tsc --noEmit
 | [docs/ROADMAP.md](./docs/ROADMAP.md) | 20-week / 740-hour plan |
 | [docs/MIGRATION.md](./docs/MIGRATION.md) | v3 → v4 port checklist |
 | [docs/COMPLIANCE.md](./docs/COMPLIANCE.md) | Kenya DPA checklist |
-| [rpos/README.md](https://github.com/ken-muritu/rpos) | RP OS + ECC forensic reference |
-| [rpacademy/README.md](https://github.com/ken-muritu/rpacademy) | Academy + mobile forensic reference |
+| [rpos/README.md](https://github.com/RoyalPriesthoodTech/rpos) | RP OS + ECC forensic reference |
+| [rpacademy/README.md](https://github.com/RoyalPriesthoodTech/rpacademy) | Academy + mobile forensic reference |
 
 ---
 
@@ -1306,4 +1306,4 @@ Cross-repo forensic audit. Resolves README drift from HEAD `8623cb3` (website v2
 
 **Remediation:** Unify all SEO/canonical references to `rpchurch.vercel.app`.
 
-*Forensic README append — June 13, 2026. See [rpacademy](https://github.com/ken-muritu/rpacademy) and [rpos](https://github.com/ken-muritu/rpos) for ecosystem parity.*
+*Forensic README append — June 13, 2026. See [rpacademy](https://github.com/RoyalPriesthoodTech/rpacademy) and [rpos](https://github.com/RoyalPriesthoodTech/rpos) for ecosystem parity.*
