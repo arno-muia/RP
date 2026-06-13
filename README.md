@@ -13,7 +13,7 @@ Rebuilt from [rpacademy](https://github.com/ken-muritu/rpacademy) (legacy `rpweb
 **Version:** `4.0.0` (root `package.json`)  
 **Current phase:** Phase 1 (Foundation) — public marketing site largely complete; CMS admin delegated to RP OS ECC; member/ops portals are scaffolds.  
 **Production URL (canonical):** [rpchurch.vercel.app](https://rpchurch.vercel.app)  
-**Last forensic update:** 2026-06-12 (commit `ca6d8a1`) · **11 commits**  
+**Last forensic update:** 2026-06-12 (commit `8623cb3`) · **13 commits**  
 **Ecosystem:** [RP OS / ECC](https://github.com/ken-muritu/rpos) · [RP Academy](https://github.com/ken-muritu/rpacademy)
 
 **Status legend:** ✅ Complete · ⚠️ Partial/Needs Work · ❌ Missing · 🔴 Critical Issue · 🟡 Technical Debt · 🟢 Good/Compliant
@@ -1257,3 +1257,53 @@ npm run type-check   # tsc --noEmit
 ---
 
 *This README is the living forensic Single Source of Truth for rpwebsite. Sections marked `[NEW]` or `[UPDATED]` reflect the June 12, 2026 ecosystem audit (ECC integration + production readiness).*
+
+---
+
+## Appendix — Production Due Diligence (June 13, 2026) `[NEW]`
+
+Cross-repo forensic audit. Resolves README drift from HEAD `8623cb3` (website v2.0 core).
+
+### README vs HEAD Drift (corrected in this update)
+
+| Item | Prior README claim | HEAD `8623cb3` reality |
+|------|-------------------|------------------------|
+| `/login` | Stub | ✅ `LoginForm` wired with NextAuth |
+| `/change-password` | Missing | ✅ Page + API route |
+| `/auth/magic` | Missing | ✅ Magic link page |
+| `/api/health` | Missing | ✅ Returns DB connectivity status |
+| `/api/rsvp` | Not documented | ✅ Visit RSVP form handler |
+| Member pages | Dashboard/household stubs only | ✅ +profile, giving-history, discipleship |
+| Fonts | Montserrat/Bebas/Dancing Script | Cinzel/Inter/JetBrains Mono |
+| Commit count | 11 | **13** |
+
+### Deployment & Production
+
+| Check | Result |
+|-------|--------|
+| Canonical URL | https://rpchurch.vercel.app (GitHub homepage, layout OG, ECC revalidate) |
+| Legacy URL | https://rpwebsite.vercel.app (still in sitemap.ts — **technical debt**) |
+| Latest deploy | `8623cb3` — design system v2, RSVP, deployment wiring |
+| GitHub Actions CI | ❌ **None** — Vercel Git integration only |
+| Turso DB | `rpwebsite` — DB-first content with JSON fallback |
+
+### Ecosystem Integration
+
+| Integration | Status |
+|-------------|--------|
+| RP OS Herald's Desk → Turso writes | ✅ Working |
+| RP OS → `/api/revalidate` cache bust | ✅ Working (`REVALIDATE_SECRET` pairing) |
+| RP Academy link | ✅ `/academy` → rpacademy.vercel.app |
+| Rate limiting on public APIs | ❌ Missing |
+| Email (Resend) | ❌ Not wired |
+
+### URL Split (Critical Technical Debt)
+
+| Source | URL |
+|--------|-----|
+| GitHub homepage, layout OG, ECC webhook | `rpchurch.vercel.app` |
+| `lib/seo.ts`, `sitemap.ts`, `robots.ts` | `rpwebsite.vercel.app` |
+
+**Remediation:** Unify all SEO/canonical references to `rpchurch.vercel.app`.
+
+*Forensic README append — June 13, 2026. See [rpacademy](https://github.com/ken-muritu/rpacademy) and [rpos](https://github.com/ken-muritu/rpos) for ecosystem parity.*
