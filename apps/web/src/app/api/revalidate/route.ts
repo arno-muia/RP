@@ -1,5 +1,6 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+import { enforceRateLimit } from "@/lib/api-guard";
 
 type Body = {
   tags?: string[];
@@ -7,6 +8,9 @@ type Body = {
 };
 
 export async function POST(request: NextRequest) {
+  const limited = await enforceRateLimit(request, "api");
+  if (limited) return limited;
+
   const secret = request.headers.get("x-revalidate-secret");
   const expected = process.env.REVALIDATE_SECRET;
 

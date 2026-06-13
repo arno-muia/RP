@@ -329,3 +329,37 @@
     transform: none;
   }
 }
+
+[data-product="website"] {
+  --theme-default: light;
+  --gradient-hero: var(--gradient-crown);
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --rp-border-default: currentColor;
+    --rp-border-focus: currentColor;
+    --shadow-gold: none;
+  }
+
+  .glass-light, .glass-gold, .glass-dark, .glass-frost, .glass-ember {
+    background: Canvas !important;
+    border: 2px solid CanvasText !important;
+    backdrop-filter: none !important;
+  }
+}
+
+@media print {
+  :root {
+    --rp-bg-primary: #ffffff !important;
+    --rp-text-primary: #000000 !important;
+    --rp-border-default: #cccccc !important;
+  }
+
+  .no-print, .glass-light, .glass-gold, .glass-dark, .glass-frost, .glass-ember,
+  nav, .mobile-menu, .theme-toggle {
+    display: none !important;
+  }
+
+  body { font-size: 12pt; line-height: 1.5; }
+}

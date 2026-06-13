@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
+import { enforceRateLimit } from "@/lib/api-guard";
 import { getPrisma } from "@/lib/prisma";
 
 const schema = z.object({
@@ -13,6 +14,9 @@ const schema = z.object({
 });
 
 export async function POST(request: Request) {
+  const limited = await enforceRateLimit(request, "contact");
+  if (limited) return limited;
+
   try {
     const body = await request.json();
     const parsed = schema.parse({

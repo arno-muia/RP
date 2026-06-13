@@ -42,8 +42,12 @@ function parseDate(dateStr: string, time?: string): Date {
 async function main() {
   console.log("🌱 Seeding Royal Priesthood website database...");
 
-  // Admin user for content management
-  const adminPassword = await bcrypt.hash("Admin@2026", 12);
+  const seedPassword = process.env.SEED_ADMIN_PASSWORD;
+  if (!seedPassword) {
+    throw new Error("Set SEED_ADMIN_PASSWORD in the environment before seeding.");
+  }
+
+  const adminPassword = await bcrypt.hash(seedPassword, 12);
   await prisma.user.upsert({
     where: { email: "admin@royalpriesthood.church" },
     update: {
@@ -61,7 +65,7 @@ async function main() {
       mustChangePassword: false,
     },
   });
-  console.log("✅ Admin: admin@royalpriesthood.church / Admin@2026");
+  console.log("✅ Admin: admin@royalpriesthood.church (password from SEED_ADMIN_PASSWORD)");
 
   // Site configuration
   const configEntries = [

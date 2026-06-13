@@ -2,6 +2,7 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
+import { enforceRateLimit } from "@/lib/api-guard";
 import { getPrisma } from "@/lib/prisma";
 
 const schema = z.object({
@@ -10,6 +11,9 @@ const schema = z.object({
 });
 
 export async function POST(request: Request) {
+  const limited = await enforceRateLimit(request, "auth");
+  if (limited) return limited;
+
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

@@ -46,6 +46,22 @@ export function ContactForm() {
         <label htmlFor="message" className={labelClass}>Message</label>
         <textarea id="message" name="message" rows={4} required className={textareaClass} />
       </div>
+      <input
+        type="text"
+        name="honeypot"
+        tabIndex={-1}
+        autoComplete="off"
+        className="absolute -left-[9999px] h-0 w-0 opacity-0"
+        aria-hidden="true"
+      />
+      <input
+        type="text"
+        name="subject"
+        tabIndex={-1}
+        autoComplete="off"
+        className="absolute -left-[9999px] h-0 w-0 opacity-0"
+        aria-hidden="true"
+      />
       <Button type="submit" variant="primary" disabled={status === "loading"} className="w-full">
         {status === "loading" ? "Sending…" : "Send Message"}
       </Button>

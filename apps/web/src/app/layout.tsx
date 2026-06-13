@@ -66,6 +66,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-product="website"
       data-theme="light"
       suppressHydrationWarning
       className={`${cinzel.variable} ${inter.variable} ${jetbrainsMono.variable} h-full`}
