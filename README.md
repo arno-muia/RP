@@ -5,7 +5,7 @@ Rebuilt from [rpacademy](https://github.com/RoyalPriesthoodTech/rpacademy) (lega
 
 | Resource | URL |
 |----------|-----|
-| **Public website (live)** | [rpwebsite.vercel.app](https://rpchurch.vercel.app/) |
+| **Public website (live)** | [rpchurch.vercel.app](https://rpchurch.vercel.app/) |
 | **Kingdom Formation Academy** | [rpacademy.vercel.app](https://rpacademy.vercel.app/) |
 | **Repository** | [github.com/ken-muritu/rpwebsite](https://github.com/RoyalPriesthoodTech/rpwebsite) |
 | **Legacy lineage** | [github.com/ken-muritu/rpacademy](https://github.com/RoyalPriesthoodTech/rpacademy) |
