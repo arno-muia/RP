@@ -6,7 +6,7 @@ Corrected from Kimi's 16-week estimate (+25% buffer). Target: **740 hours**.
 
 | Week | Deliverables |
 |------|----------------|
-| 1 | Prisma schema finalized (28 models, Household domain), Turso prod DB, KDPA docs started |
+| 1 | Prisma schema finalized (35 models, 37 enums, Household domain), Turso prod DB, KDPA docs started |
 | 2 | NextAuth v5, login lockout, JWT roles, middleware RBAC |
 | 3 | Public pages: Home, About, Sermons, Visit (Motivation design system) |
 | 4 | Member portal scaffold: profile, household view; Ops dashboard KPI shell |
@@ -56,7 +56,7 @@ Corrected from Kimi's 16-week estimate (+25% buffer). Target: **740 hours**.
 
 - [x] Repo, Vercel, Next.js 16 scaffold
 - [x] Motivation-inspired public homepage
-- [x] Prisma schema port (v3, incl. Household)
+- [x] Prisma schema port (35 models, 37 enums, incl. Household)
 - [x] Three-layer route groups + RBAC middleware
 - [ ] Turso production + env on Vercel
 - [ ] NextAuth login UI + seed data
