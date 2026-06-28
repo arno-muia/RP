@@ -28,14 +28,14 @@ export function ServiceTimesGrid({ services, variant = "cards" }: ServiceTimesGr
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-x-24 gap-y-8 md:grid-cols-2 lg:grid-cols-2 max-w-6xl mx-auto">
       {services.map((service) => (
         <article
           key={service.name}
           className="card-hover overflow-hidden rounded-xl glass-frost"
         >
           {service.image && (
-            <div className="relative aspect-[16/9] w-full">
+            <div className="relative aspect-[16/6] w-full">
               <Image
                 src={service.image}
                 alt={service.name}
@@ -45,7 +45,7 @@ export function ServiceTimesGrid({ services, variant = "cards" }: ServiceTimesGr
               />
             </div>
           )}
-          <div className="border-t border-border p-6">
+          <div className="border-t border-border p-4">
             <div className="mb-4 flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-primary">

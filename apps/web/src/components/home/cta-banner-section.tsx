@@ -9,7 +9,7 @@ export async function CtaBannerSection() {
 
   return (
     <section className="section-padding">
-      <ScrollReveal className="glass-gold mx-auto max-w-7xl rounded-2xl px-5 py-16 text-center md:px-8">
+      <ScrollReveal className="glass-frost mx-auto max-w-7xl rounded-2xl px-5 py-16 text-center md:px-8">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
           Join Us This Sunday
         </p>

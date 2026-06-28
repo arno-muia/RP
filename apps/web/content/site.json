@@ -42,8 +42,8 @@
       "image": "/images/events/sunday-online-service-poster-1.jpeg"
     },
     {
-      "name": "Sunday Main Service",
-      "day": "Sunday",
+      "name": "Saturday Physical Service",
+      "day": "Saturday",
       "time": "9:00 AM – 12:00 PM",
       "platform": "physical",
       "location": "Voice of Grace, Behind Spoonzoom, Thika",
@@ -59,15 +59,6 @@
       "link": "https://www.youtube.com/@RoyalPriesthoodEmbassy",
       "description": "Blueprint Tuesdays — deep discipleship teaching and Holy Communion. Where Kingdom patterns are revealed.",
       "image": "/images/events/kingdom-formation-poster.jpeg"
-    },
-    {
-      "name": "Youth Service",
-      "day": "Sunday",
-      "time": "11:30 AM – 1:00 PM",
-      "platform": "physical",
-      "location": "Youth Auditorium, Thika",
-      "description": "Dynamic service for young people with worship, teaching, and community.",
-      "image": "/images/services/kingdom-formation-4.jpg"
     },
     {
       "name": "Thursday Intercession",

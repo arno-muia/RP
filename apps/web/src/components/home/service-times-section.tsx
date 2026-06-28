@@ -1,7 +1,6 @@
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { getServiceTimes } from "@/lib/content";
 import { ServiceTimesGrid } from "@/components/shared/service-times-grid";
-import { Button } from "@/components/ui/button";
 
 export async function ServiceTimesSection() {
   const services = await getServiceTimes();
@@ -23,11 +22,6 @@ export async function ServiceTimesSection() {
         <ScrollReveal stagger={0.1}>
           <ServiceTimesGrid services={services} />
         </ScrollReveal>
-        <div className="mt-10 text-center">
-          <Button href="/visit" variant="secondary">
-            What to Expect
-          </Button>
-        </div>
       </div>
     </section>
   );

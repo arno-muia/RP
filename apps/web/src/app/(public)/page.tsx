@@ -1,8 +1,7 @@
 import { HeroSection } from "@/components/home/hero-section";
 import { ServiceTimesSection } from "@/components/home/service-times-section";
 import { WelcomeSection } from "@/components/home/welcome-section";
-import { SermonSection } from "@/components/home/sermon-section";
-import { EventsSection } from "@/components/home/events-section";
+import { TeachingEventsSection } from "@/components/home/teaching-events-section";
 import { WhatToExpectSection } from "@/components/home/what-to-expect-section";
 import { TestimonialsSection } from "@/components/home/testimonials-section";
 import { CtaBannerSection } from "@/components/home/cta-banner-section";
@@ -18,11 +17,10 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
       <HeroSection />
-      <ServiceTimesSection />
       <WelcomeSection />
-      <SermonSection />
-      <EventsSection />
+      <ServiceTimesSection />
       <WhatToExpectSection />
+      <TeachingEventsSection />
       <TestimonialsSection />
       <CtaBannerSection />
     </>

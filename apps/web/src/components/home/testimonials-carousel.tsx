@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Testimonial } from "@/types";
 
 export function TestimonialsCarousel({
   testimonials,
+  sermonThumbnail,
 }: {
   testimonials: Testimonial[];
+  sermonThumbnail: string;
 }) {
   const [index, setIndex] = useState(0);
 
@@ -22,11 +25,12 @@ export function TestimonialsCarousel({
   if (testimonials.length === 0) return null;
 
   const current = testimonials[index];
+  const photoSrc = current.photo || sermonThumbnail;
 
   return (
     <div className="relative mx-auto max-w-3xl">
       <AnimatePresence mode="wait">
-        <motion.blockquote
+        <motion.div
           key={current.id}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -34,16 +38,27 @@ export function TestimonialsCarousel({
           transition={{ duration: 0.5 }}
           className="glass-frost rounded-2xl p-8 text-center md:p-12"
         >
-          <p className="text-lg leading-relaxed text-foreground md:text-xl">
+          <blockquote className="text-lg leading-relaxed text-foreground md:text-xl">
             &ldquo;{current.quote}&rdquo;
-          </p>
+          </blockquote>
           <footer className="mt-6">
+            {photoSrc && (
+              <div className="mx-auto mb-3 h-20 w-20 overflow-hidden rounded-full border-2 border-primary/30">
+                <Image
+                  src={photoSrc}
+                  alt={current.name}
+                  width={80}
+                  height={80}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )}
             <p className="font-semibold text-primary">{current.name}</p>
             {current.role && (
               <p className="text-sm text-muted-foreground">{current.role}</p>
             )}
           </footer>
-        </motion.blockquote>
+        </motion.div>
       </AnimatePresence>
 
       {testimonials.length > 1 && (

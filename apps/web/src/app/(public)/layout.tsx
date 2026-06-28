@@ -13,7 +13,7 @@ export default function PublicLayout({
   return (
     <>
       <SiteHeader />
-      <main id="main-content">
+      <main id="main-content" className="bg-background">
         <PageTransition>{children}</PageTransition>
       </main>
       <SiteFooter />

@@ -1,9 +1,14 @@
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { TestimonialsCarousel } from "@/components/home/testimonials-carousel";
-import { getTestimonials } from "@/lib/content";
+import { getTestimonials, getLatestSermon } from "@/lib/content";
 
 export async function TestimonialsSection() {
-  const testimonials = await getTestimonials();
+  const [testimonials, latestSermon] = await Promise.all([
+    getTestimonials(),
+    getLatestSermon(),
+  ]);
+
+  const sermonThumbnail = latestSermon?.thumbnail ?? "";
 
   return (
     <section className="register-celestial section-padding">
@@ -17,7 +22,7 @@ export async function TestimonialsSection() {
           </h2>
         </ScrollReveal>
         <ScrollReveal>
-          <TestimonialsCarousel testimonials={testimonials} />
+          <TestimonialsCarousel testimonials={testimonials} sermonThumbnail={sermonThumbnail} />
         </ScrollReveal>
       </div>
     </section>

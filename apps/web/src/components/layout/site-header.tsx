@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { navLinks, site } from "@/lib/site";
@@ -12,9 +12,23 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 50);
+
+      if (currentScrollY <= 50) {
+        setHidden(false);
+      } else {
+        setHidden(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
@@ -35,11 +49,11 @@ export function SiteHeader() {
     <>
       <motion.header
         initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={{ opacity: 1, y: hidden ? -80 : 0 }}
         transition={{ duration: 0.3 }}
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-          scrolled ? "glass-light shadow-sm" : "bg-transparent",
+          "fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow] duration-300",
+          scrolled ? "bg-gold-500 shadow-md" : "bg-gold-500",
         )}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 md:px-8">
@@ -54,13 +68,15 @@ export function SiteHeader() {
               height={48}
               className={cn(
                 "h-10 w-auto md:h-11",
-                !scrolled && "brightness-0 invert",
+                "brightness-0 invert",
               )}
             />
           </Link>
 
           <nav className="hidden items-center gap-6 lg:flex" aria-label="Main">
-            {navLinks.primary.map((link) => {
+            {navLinks.primary
+              .filter((link) => link.label !== "Academy")
+              .map((link) => {
               const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
               return (
                 <Link
@@ -68,9 +84,7 @@ export function SiteHeader() {
                   href={link.href}
                   className={cn(
                     "relative text-sm font-medium transition-colors duration-200",
-                    scrolled
-                      ? "text-foreground hover:text-primary"
-                      : "text-white/90 hover:text-gold-300",
+                    "text-white/90 hover:text-white",
                     active && "text-primary",
                   )}
                 >
@@ -84,24 +98,6 @@ export function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className={cn(
-                "hidden text-sm font-medium transition-colors duration-200 md:inline",
-                scrolled
-                  ? "text-muted-foreground hover:text-primary"
-                  : "text-white/80 hover:text-white",
-              )}
-            >
-              Sign In
-            </Link>
-            <Button
-              href="/visit"
-              variant={scrolled ? "primary" : "alternate"}
-              className="hidden sm:inline-flex"
-            >
-              Plan Your Visit
-            </Button>
             <button
               type="button"
               aria-expanded={menuOpen}
@@ -109,9 +105,7 @@ export function SiteHeader() {
               onClick={() => setMenuOpen((open) => !open)}
               className={cn(
                 "group flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-full border transition-colors",
-                scrolled
-                  ? "border-border text-foreground"
-                  : "border-white/30 text-white",
+                "border-white/30 text-white",
               )}
             >
               <span
@@ -182,49 +176,7 @@ function MobileMenuOverlay({ onClose }: { onClose: () => void }) {
           </div>
 
           <div className="space-y-8">
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-400">
-                Connect
-              </p>
-              {navLinks.connect.map((link, i) => (
-                <motion.div
-                  key={link.href}
-                  custom={i + navLinks.primary.length}
-                  variants={linkVariants}
-                  initial="hidden"
-                  animate="show"
-                >
-                  <Link
-                    href={link.href}
-                    onClick={onClose}
-                    className="block text-base text-ivory-400 hover:text-ivory-25"
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="flex gap-4"
-            >
-              {Object.entries(site.social).map(([network, href]) => (
-                <a
-                  key={network}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm uppercase tracking-widest text-ivory-400 hover:text-gold-400"
-                >
-                  {network}
-                </a>
-              ))}
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
               <Link
                 href="/visit"
                 onClick={onClose}

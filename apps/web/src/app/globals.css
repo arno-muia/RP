@@ -101,8 +101,8 @@
 /* Light default (Royal Theme — public website) */
 :root,
 [data-theme="light"] {
-  --rp-bg-primary: #fffcf5;
-  --rp-bg-secondary: #f9f5ea;
+  --rp-bg-primary: #faf3ea;
+  --rp-bg-secondary: #faf3ea;
   --rp-bg-tertiary: #f5edd8;
   --rp-text-primary: #111111;
   --rp-text-secondary: #444444;
@@ -115,7 +115,7 @@
   --gradient-kingdom: linear-gradient(135deg, #f5edd8 0%, #c8882a 100%);
   --gradient-fire: linear-gradient(135deg, #f9e08a 0%, #e5871b 100%);
   --gradient-obsidian: linear-gradient(180deg, #1a1a1a 0%, #111111 50%, #0a0a0a 100%);
-  --gradient-page: linear-gradient(180deg, #fffcf5 0%, #f9f5ea 100%);
+  --gradient-page: var(--rp-bg-primary);
   --rp-glass-bg: rgba(255, 255, 255, 0.78);
   --rp-glass-border: rgba(236, 224, 196, 0.55);
   --rp-glass-border-bottom: rgba(236, 224, 196, 0.72);
@@ -130,9 +130,9 @@
 }
 
 [data-theme="dark"] {
-  --rp-bg-primary: #111111;
-  --rp-bg-secondary: #1a1a1a;
-  --rp-bg-tertiary: #242424;
+  --rp-bg-primary: #271f14;
+  --rp-bg-secondary: #271f14;
+  --rp-bg-tertiary: #271f14;
   --rp-text-primary: #fffefa;
   --rp-text-secondary: #d9c9a8;
   --rp-text-muted: #666666;
@@ -140,7 +140,7 @@
   --rp-border-focus: #e5b11a;
   --rp-accent-primary: #e5b11a;
   --rp-accent-secondary: #d9c9a8;
-  --gradient-page: var(--gradient-obsidian);
+  --gradient-page: #271f14;
   --rp-glass-bg: rgba(17, 17, 17, 0.65);
   --rp-glass-border: rgba(255, 255, 255, 0.08);
   --rp-glass-border-bottom: rgba(255, 255, 255, 0.12);

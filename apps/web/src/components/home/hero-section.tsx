@@ -34,7 +34,9 @@ export async function HeroSection() {
             className="font-display text-4xl leading-[1.1] tracking-tight text-shadow md:text-6xl lg:text-[3.5rem]"
             style={{ textShadow: "0 2px 24px rgba(0,0,0,0.4)" }}
           >
-            {site.tagline}
+            Discover Your True Identity in
+            <br />
+            Christ— Faith Statement
           </h1>
           <p
             data-hero-line
@@ -48,11 +50,6 @@ export async function HeroSection() {
           <span data-hero-cta>
             <Button href="/visit" variant="gold">
               Plan Your Visit
-            </Button>
-          </span>
-          <span data-hero-cta>
-            <Button href="/give" variant="ghost">
-              Give Online
             </Button>
           </span>
         </div>

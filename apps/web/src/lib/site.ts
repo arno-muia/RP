@@ -21,11 +21,10 @@ export const navLinks = {
     { label: "Visit", href: "/visit" },
     { label: "Events", href: "/events" },
     { label: "Academy", href: "/academy" },
-    { label: "Give", href: "/give" },
+    { label: "Partner", href: "/give" },
   ],
   media: [
     { label: "Sermons", href: "/sermons" },
-    { label: "Series", href: "/series" },
   ],
   connect: [
     { label: "Contact", href: "/contact" },

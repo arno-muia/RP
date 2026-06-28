@@ -1,15 +1,13 @@
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { getServiceTimes } from "@/lib/content";
 import { navLinks, site } from "@/lib/site";
 
 const footerColumns = [
   {
     title: "About",
     links: [
-      { label: "Our Story", href: "/about" },
-      { label: "Leadership", href: "/about#leadership" },
+      { label: "Our Vision", href: "/about" },
       { label: "Statement of Faith", href: "/about#beliefs" },
-      { label: "2026 Theme", href: "/about#theme" },
+      { label: "Leadership", href: "/about#leadership" },
     ],
   },
   { title: "Media", links: [...navLinks.media] },
@@ -33,10 +31,8 @@ const footerColumns = [
 ] as const;
 
 export async function SiteFooter() {
-  const serviceTimes = await getServiceTimes();
-
   return (
-    <footer className="border-t border-border bg-ivory-100">
+    <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-7xl px-5 py-16 md:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr]">
           <div className="space-y-6">
@@ -57,18 +53,6 @@ export async function SiteFooter() {
                 <br />
                 {site.address.city}, {site.address.country}
               </p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                Service Times
-              </p>
-              <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-                {serviceTimes.map((s) => (
-                  <li key={s.name}>
-                    {s.day} · {s.name} · {s.time}
-                  </li>
-                ))}
-              </ul>
             </div>
             <div className="glass-gold rounded-xl p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
