@@ -11,19 +11,29 @@ import { cn } from "@/lib/cn";
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
+  const pathname = usePathname();
   const lastScrollY = useRef(0);
+
+  const HERO_THRESHOLD_PX = 100; // how far below the hero section the navbar stays hidden on scroll-up
 
   useEffect(() => {
     const onScroll = () => {
       const currentScrollY = window.scrollY;
       setScrolled(currentScrollY > 50);
 
-      if (currentScrollY <= 50) {
+      if (currentScrollY <= 0) {
+        // At the very top — always show
         setHidden(false);
-      } else {
+      } else if (currentScrollY > lastScrollY.current) {
+        // Scrolling down → hide
         setHidden(true);
+      } else {
+        // Scrolling up — keep hidden unless we're back near the top (hero section)
+        if (currentScrollY <= HERO_THRESHOLD_PX) {
+          setHidden(false);
+        }
+        // otherwise stay hidden (don't change state)
       }
 
       lastScrollY.current = currentScrollY;
@@ -85,7 +95,7 @@ export function SiteHeader() {
                   className={cn(
                     "relative text-sm font-medium transition-colors duration-200",
                     "text-white/90 hover:text-white",
-                    active && "text-primary",
+                    active && "text-white",
                   )}
                 >
                   {link.label}

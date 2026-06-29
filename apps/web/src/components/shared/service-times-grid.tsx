@@ -28,7 +28,7 @@ export function ServiceTimesGrid({ services, variant = "cards" }: ServiceTimesGr
   }
 
   return (
-    <div className="grid gap-x-24 gap-y-8 md:grid-cols-2 lg:grid-cols-2 max-w-6xl mx-auto">
+    <div className="grid gap-x-24 gap-y-8 md:grid-cols-2 lg:grid-cols-2">
       {services.map((service) => (
         <article
           key={service.name}

@@ -61,8 +61,17 @@
       "image": "/images/events/kingdom-formation-poster.jpeg"
     },
     {
-      "name": "Thursday Intercession",
+      "name": "Thursday Partner's Meeting",
       "day": "Thursday",
+      "time": "TBD",
+      "platform": "physical",
+      "location": "Voice of Grace, Behind Spoonzoom, Thika",
+      "description": "Corporate prayer and intercession for the nation, church, and families.",
+      "image": "/images/services/kingdom-formation-3.jpg"
+    },
+    {
+      "name": "Cell Group Meetings",
+      "day": "Wednesday",
       "time": "TBD",
       "platform": "physical",
       "location": "Voice of Grace, Behind Spoonzoom, Thika",

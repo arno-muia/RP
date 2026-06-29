@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { registerGsap } from "@/lib/animations";
@@ -27,7 +27,14 @@ export function ScrollReveal({
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    if (prefersReduced) return;
+    if (prefersReduced) {
+      // Ensure content is visible when reduced motion is preferred
+      gsap.set(ref.current, { opacity: 1, y: 0 });
+      if (stagger > 0) {
+        gsap.set(ref.current.children, { opacity: 1, y: 0 });
+      }
+      return;
+    }
 
     const targets = stagger > 0 ? ref.current.children : ref.current;
     gsap.from(targets, {

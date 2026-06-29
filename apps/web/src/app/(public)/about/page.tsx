@@ -1,6 +1,7 @@
 import { PageHero } from "@/components/shared/page-hero";
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { Button } from "@/components/ui/button";
+import { WelcomeSection } from "@/components/home/welcome-section";
 import { getBeliefs, getLeadership, getValues, getSiteConfig } from "@/lib/content";
 import { images } from "@/lib/images";
 import { site } from "@/lib/site";
@@ -40,26 +41,7 @@ export default async function AboutPage() {
         scripture={site.scripture}
       />
 
-      <section className="register-parchment section-padding">
-        <ScrollReveal className="mx-auto max-w-4xl px-5 md:px-8">
-          <h2 className="font-display text-3xl text-foreground md:text-4xl">Our Story</h2>
-          <div className="mt-6 space-y-4 text-lg leading-relaxed text-foreground">
-            <p>
-              Royal Priesthood Embassy was founded with a vision to raise a generation deeply
-              rooted in the Word of God and fully committed to following Christ alone. What
-              began as a gathering of believers hungry for Kingdom truth has grown into a
-              vibrant embassy community in Thika, Kenya.
-            </p>
-            <p>
-              We are not merely a church — we are a Kingdom Embassy. When you enter our
-              space, you enter a realm where the laws of this place are not Kenya&apos;s laws.
-              We exist to equip ambassadors who carry the culture of heaven into every sphere
-              of daily influence.
-            </p>
-            <p>{site.description}</p>
-          </div>
-        </ScrollReveal>
-      </section>
+      <WelcomeSection />
 
       <section id="beliefs" className="register-celestial section-padding">
         <div className="mx-auto max-w-7xl px-5 md:px-8">

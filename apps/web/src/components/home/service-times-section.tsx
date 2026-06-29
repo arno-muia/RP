@@ -1,6 +1,6 @@
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { getServiceTimes } from "@/lib/content";
-import { ServiceTimesGrid } from "@/components/shared/service-times-grid";
+import { ServiceTimesCarousel } from "./service-times-carousel";
 
 export async function ServiceTimesSection() {
   const services = await getServiceTimes();
@@ -19,8 +19,8 @@ export async function ServiceTimesSection() {
             Whether you join us in Thika or online from anywhere in the world, there is a gathering for you.
           </p>
         </ScrollReveal>
-        <ScrollReveal stagger={0.1}>
-          <ServiceTimesGrid services={services} />
+        <ScrollReveal>
+          <ServiceTimesCarousel services={services} />
         </ScrollReveal>
       </div>
     </section>
